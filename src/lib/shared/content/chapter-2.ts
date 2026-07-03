@@ -64,8 +64,7 @@ OpenKeychain (Android): tap the three dots → Sign → paste the text → sign 
 		{
 			id: 'ch2-l3',
 			title: 'Verify a signature',
-			description:
-				'Use your PGP tool to verify a signed message and confirm who signed it.',
+			description: 'Use your PGP tool to verify a signed message and confirm who signed it.',
 			xpReward: 75,
 			challenges: [
 				{

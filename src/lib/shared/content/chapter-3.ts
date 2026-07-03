@@ -3,13 +3,13 @@ import type { Chapter } from '$lib/shared/types';
 const chapter3 = {
 	id: 'ch3',
 	title: 'Encryption',
-	description:
-		'Send messages that only the intended recipient can read, using their public key.',
+	description: 'Send messages that only the intended recipient can read, using their public key.',
 	lessons: [
 		{
 			id: 'ch3-l1',
 			title: 'Asymmetric encryption explained',
-			description: 'The locked-box analogy — why anyone can encrypt but only one person can decrypt.',
+			description:
+				'The locked-box analogy — why anyone can encrypt but only one person can decrypt.',
 			xpReward: 10,
 			challenges: [
 				{
@@ -88,7 +88,8 @@ GPG will ask for your passphrase if your private key is protected by one. The de
 		{
 			id: 'ch3-l4',
 			title: 'Sign and encrypt together',
-			description: 'Combine signing and encryption: prove authorship and protect confidentiality at once.',
+			description:
+				'Combine signing and encryption: prove authorship and protect confidentiality at once.',
 			xpReward: 100,
 			challenges: [
 				{

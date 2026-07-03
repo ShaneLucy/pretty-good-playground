@@ -35,9 +35,7 @@ export function getMainKv(platform: App.Platform | undefined): KvStore {
 }
 
 export function getEphemeralKv(platform: App.Platform | undefined): KvStore {
-	return platform
-		? wrapKvNamespace(platform.env.EPHEMERAL_KV)
-		: createDevStore(devEphemeralStore);
+	return platform ? wrapKvNamespace(platform.env.EPHEMERAL_KV) : createDevStore(devEphemeralStore);
 }
 
 export const userKey = (fingerprint: string): string => `user:v1:${fingerprint}`;

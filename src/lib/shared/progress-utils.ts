@@ -65,7 +65,8 @@ export function chapterPercent(progress: ProgressRecord, chapter: Chapter): numb
 	const total = chapter.lessons.reduce((sum, l) => sum + l.challenges.length, 0);
 	if (total === 0) return 0;
 	const completed = chapter.lessons.reduce(
-		(sum, l) => sum + l.challenges.filter((c) => progress.completedChallenges.includes(c.id)).length,
+		(sum, l) =>
+			sum + l.challenges.filter((c) => progress.completedChallenges.includes(c.id)).length,
 		0
 	);
 	return Math.round((completed / total) * 100);

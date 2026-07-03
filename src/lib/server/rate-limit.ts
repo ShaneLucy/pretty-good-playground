@@ -12,8 +12,8 @@ export async function rateLimit(
 		kv.get(rateLimitKey(endpoint, identifier, minute - 1)),
 		kv.get(rateLimitKey(endpoint, identifier, minute))
 	]);
-	const prevCount = prevStr !== null ? (parseInt(prevStr, 10) || 0) : 0;
-	const currCount = currStr !== null ? (parseInt(currStr, 10) || 0) : 0;
+	const prevCount = prevStr !== null ? parseInt(prevStr, 10) || 0 : 0;
+	const currCount = currStr !== null ? parseInt(currStr, 10) || 0 : 0;
 	const elapsed = (Date.now() % 60_000) / 60_000;
 	const estimate = prevCount * (1 - elapsed) + currCount;
 	if (estimate >= limit) return { allowed: false };

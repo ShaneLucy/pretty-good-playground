@@ -22,44 +22,45 @@ The palette draws from two registers: **trust and calm** (primary) and **achieve
 
 Indigo sits between the calm authority of blue and the creativity of purple. It is the color language of ProtonMail, Notion, and Linear — tools privacy-conscious users already trust.
 
-| Role | Hex | Usage |
-|---|---|---|
-| Primary 700 | `#3730A3` | Hover states, active nav |
-| Primary 600 | `#4F46E5` | Primary CTAs, links, focus rings |
+| Role        | Hex       | Usage                              |
+| ----------- | --------- | ---------------------------------- |
+| Primary 700 | `#3730A3` | Hover states, active nav           |
+| Primary 600 | `#4F46E5` | Primary CTAs, links, focus rings   |
 | Primary 500 | `#6366F1` | Secondary actions, selected states |
 | Primary 100 | `#E0E7FF` | Highlighted backgrounds, tag fills |
-| Primary 50 | `#EEF2FF` | Subtle section backgrounds |
+| Primary 50  | `#EEF2FF` | Subtle section backgrounds         |
 
 **Gamification Accent — Amber/Gold** (reserved exclusively for XP and rewards)
 
-| Role | Hex | Usage |
-|---|---|---|
-| Gold 600 | `#D97706` | Achievement badge borders, XP labels |
+| Role     | Hex       | Usage                                     |
+| -------- | --------- | ----------------------------------------- |
+| Gold 600 | `#D97706` | Achievement badge borders, XP labels      |
 | Gold 500 | `#F59E0B` | XP bar fill, star icons, level indicators |
-| Gold 100 | `#FEF3C7` | Achievement card backgrounds |
+| Gold 100 | `#FEF3C7` | Achievement card backgrounds              |
 
 **Neutral Scale — Warm Grays** (warm, not cool/blue-tinted — warmth aligns with approachability)
 
-| Hex | Usage |
-|---|---|
-| `#111827` | Primary headings |
-| `#374151` | Body text |
+| Hex       | Usage                            |
+| --------- | -------------------------------- |
+| `#111827` | Primary headings                 |
+| `#374151` | Body text                        |
 | `#6B7280` | Placeholder text, muted captions |
-| `#D1D5DB` | Borders, dividers |
-| `#F3F4F6` | Table row alternates |
-| `#F9FAFB` | Page background |
-| `#FFFFFF` | Card backgrounds, modals |
+| `#D1D5DB` | Borders, dividers                |
+| `#F3F4F6` | Table row alternates             |
+| `#F9FAFB` | Page background                  |
+| `#FFFFFF` | Card backgrounds, modals         |
 
 **Semantic Colors**
 
-| Role | Hex | Tint | Usage |
-|---|---|---|---|
-| Success | `#059669` | `#D1FAE5` | Correct answers, completed states |
-| Error | `#DC2626` | `#FEE2E2` | Wrong answers, validation errors |
-| Warning | `#D97706` | `#FEF3C7` | Caution states |
-| Info | `#0284C7` | `#E0F2FE` | Hint panels, informational callouts |
+| Role    | Hex       | Tint      | Usage                               |
+| ------- | --------- | --------- | ----------------------------------- |
+| Success | `#059669` | `#D1FAE5` | Correct answers, completed states   |
+| Error   | `#DC2626` | `#FEE2E2` | Wrong answers, validation errors    |
+| Warning | `#D97706` | `#FEF3C7` | Caution states                      |
+| Info    | `#0284C7` | `#E0F2FE` | Hint panels, informational callouts |
 
 **Dark Mode** (supported from day one — privacy-focused users overwhelmingly prefer it):
+
 - Page background: `#0F172A`
 - Card background: `#1E293B`
 - Primary text: `#F1F5F9`
@@ -81,19 +82,19 @@ No fonts are loaded from external CDNs. All fonts are bundled with the app and s
 
 **Type Scale** (base 16px, Major Third ratio 1.25)
 
-| Token | Size | Line Height | Weight | Usage |
-|---|---|---|---|---|
-| `text-5xl` | 48px | 1.15 | 700 | Chapter titles (desktop) |
-| `text-4xl` | 36px | 1.2 | 700 | Page headings |
-| `text-3xl` | 30px | 1.25 | 600 | Section headings |
-| `text-2xl` | 24px | 1.3 | 600 | Card headings, modal titles |
-| `text-xl` | 20px | 1.4 | 500 | Subheadings |
-| `text-lg` | 18px | 1.5 | 400 | Lead paragraphs |
-| `text-base` | 16px | 1.6 | 400 | Body text |
-| `text-sm` | 14px | 1.5 | 400 | Labels, captions |
-| `text-xs` | 12px | 1.4 | 400 | Badges, legal |
-| `mono-base` | 14px | 1.6 | 400 | Inline key snippets |
-| `mono-lg` | 16px | 1.6 | 400 | PGP block displays |
+| Token       | Size | Line Height | Weight | Usage                       |
+| ----------- | ---- | ----------- | ------ | --------------------------- |
+| `text-5xl`  | 48px | 1.15        | 700    | Chapter titles (desktop)    |
+| `text-4xl`  | 36px | 1.2         | 700    | Page headings               |
+| `text-3xl`  | 30px | 1.25        | 600    | Section headings            |
+| `text-2xl`  | 24px | 1.3         | 600    | Card headings, modal titles |
+| `text-xl`   | 20px | 1.4         | 500    | Subheadings                 |
+| `text-lg`   | 18px | 1.5         | 400    | Lead paragraphs             |
+| `text-base` | 16px | 1.6         | 400    | Body text                   |
+| `text-sm`   | 14px | 1.5         | 400    | Labels, captions            |
+| `text-xs`   | 12px | 1.4         | 400    | Badges, legal               |
+| `mono-base` | 14px | 1.6         | 400    | Inline key snippets         |
+| `mono-lg`   | 16px | 1.6         | 400    | PGP block displays          |
 
 Letter spacing: headings at `-0.02em`. Body at `0`. Labels/caps at `0.05em`.
 
@@ -103,22 +104,23 @@ Letter spacing: headings at `-0.02em`. Body at `0`. Labels/caps at `0.05em`.
 
 Base unit: **8px**. All spacing is a multiple.
 
-| Token | Value | Usage |
-|---|---|---|
-| `space-1` | 4px | Icon-to-label gaps |
-| `space-2` | 8px | Tight padding |
-| `space-4` | 16px | Card padding (compact) |
-| `space-6` | 24px | Card padding (standard) |
-| `space-8` | 32px | Between-component gaps |
-| `space-12` | 48px | Section rhythm |
-| `space-16` | 64px | Major section breaks |
-| `space-24` | 96px | Hero vertical padding |
+| Token      | Value | Usage                   |
+| ---------- | ----- | ----------------------- |
+| `space-1`  | 4px   | Icon-to-label gaps      |
+| `space-2`  | 8px   | Tight padding           |
+| `space-4`  | 16px  | Card padding (compact)  |
+| `space-6`  | 24px  | Card padding (standard) |
+| `space-8`  | 32px  | Between-component gaps  |
+| `space-12` | 48px  | Section rhythm          |
+| `space-16` | 64px  | Major section breaks    |
+| `space-24` | 96px  | Hero vertical padding   |
 
 ---
 
 ### Component Style
 
 **Border radius:**
+
 - `4px` — small tags, inline badges
 - `8px` — inputs, buttons, standard cards
 - `12px` — modals, large cards, lesson panels
@@ -127,6 +129,7 @@ Base unit: **8px**. All spacing is a multiple.
 Rounded corners test better with non-technical audiences and signal "safe" and "approachable." Hard corners evoke terminals and CLI tools — exactly the aesthetic being rejected.
 
 **Shadow system** (subtle — depth through layering, not drama):
+
 ```
 shadow-sm:  0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)   — cards
 shadow-md:  0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06)   — elevated cards
@@ -213,6 +216,7 @@ Minimal. No dropdowns, no notification bells, no avatar menus. Social-app naviga
 **Layout:** Single column, full-width hero, sections below. No sidebar.
 
 **Hero:**
+
 - Eyebrow (small caps, Gray 500): `LEARN PGP ENCRYPTION`
 - Headline (text-5xl, Plus Jakarta Sans 700): `Privacy is a skill. Let's learn it together.`
 - Subhead (text-xl, max-width 560px): `Pretty Good Playground teaches you how to use PGP encryption through hands-on challenges — no cryptography background required.`
@@ -227,6 +231,7 @@ Trust signals live in the hero, not the footer. Privacy-conscious users look for
 **"What you'll learn" section:** Six chapter cards in a horizontal row (vertical on mobile), non-interactive, showing title and one-line description.
 
 **"How it works" section:** Three-step explainer.
+
 1. Get a PGP key — "Use GPG, Kleopatra, or OpenKeychain. We'll point you to the right tool." (Link to `/resources`)
 2. Complete interactive challenges — "Learn by doing. Sign messages, encrypt files, verify signatures — with your own tools."
 3. Level up — "Track progress, earn XP, unlock chapters."
@@ -268,11 +273,13 @@ A collapsible `<details>` section at the bottom: `What is a key pair?` — plain
 **Subhead:** `Paste your armored public key below. This is the key that starts with "-----BEGIN PGP PUBLIC KEY BLOCK-----".`
 
 **Form elements:**
+
 1. Display name input (text, required): Label: `Choose a display name`, placeholder: `Alice`, helper text: `This can be anything. It's shown on your profile but your fingerprint is your real identity.`
 2. Public key textarea (large, JetBrains Mono, ~240px height): Label: `Your public key (armored)`, placeholder: `-----BEGIN PGP PUBLIC KEY BLOCK-----`
 3. Submit button: `Register →`
 
 **Server-side validation errors** (rendered inline after form submission — no JS needed):
+
 - Missing key: `Please paste your public key.`
 - Invalid key block: `That doesn't look like a complete PGP public key. Make sure you've copied the entire block, including the "-----BEGIN" and "-----END" lines.`
 - Already registered: `This key is already registered. [Sign in instead →]`
@@ -293,15 +300,18 @@ A collapsible `<details>` section at the bottom: `What is a key pair?` — plain
 **Flash banner area** (top of content, above headline): Renders server-side flash messages if present (e.g., "Registration complete — sign in to continue"). Styled per flash type. Visible without JS.
 
 **Form elements:**
+
 1. Public key textarea (JetBrains Mono): Label: `Your public key (armored)`
 2. "Remember this device" checkbox: checked by default. Label: `Stay signed in for 30 days`. Unchecked = session cookie only.
 3. Submit button: `Continue →`
 
 **Below form:**
+
 - `Don't have an account? [Register →]`
 - `Can't find your key? [Help →]` (links to `/lost-my-key`)
 
 **Server-side error states:**
+
 - No account found: `No account is registered for this key. [Register →]`
 - Invalid key: `That doesn't look like a valid PGP public key.`
 - Rate limited: `Too many attempts. Please wait a minute and try again.`
@@ -324,6 +334,7 @@ The most technically complex UX moment. Non-technical users may not know what "s
 **Step 1 — The code to sign**
 
 A card containing:
+
 - Label: `Copy this code`
 - The nonce displayed in a `<pre>` block (JetBrains Mono, selectable, full width)
 - A `<p>` instruction: `Select the text above and copy it.`
@@ -354,14 +365,19 @@ PGP Everywhere (iOS):
 
 ```html
 <form method="POST">
-  <label for="signed">Paste the signed output here</label>
-  <textarea id="signed" name="signed" rows="12"
-    placeholder="-----BEGIN PGP SIGNED MESSAGE-----"></textarea>
-  <button type="submit">Verify →</button>
+	<label for="signed">Paste the signed output here</label>
+	<textarea
+		id="signed"
+		name="signed"
+		rows="12"
+		placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
+	></textarea>
+	<button type="submit">Verify →</button>
 </form>
 ```
 
 **Error states (rendered on form re-submission — no JS needed):**
+
 - Wrong key: `This signature doesn't match your registered key. Make sure you're signing with the private key that goes with your public key.`
 - Invalid format: `That doesn't look like a signed PGP message. Make sure you copied the entire output, including all header lines.`
 - Expired challenge: `This sign-in session expired. [Start again →]`
@@ -378,6 +394,7 @@ PGP Everywhere (iOS):
 **Flash banner area** at the top — achievement banners render here without JS.
 
 **Stats Sidebar:**
+
 - Fingerprint chip (first 8 chars, JetBrains Mono, large)
 - Level badge: `Level 3 — Apprentice`
 - XP bar: `<progress value="320" max="500"></progress>` with label `320 / 500 XP` — CSS-styled `<progress>` element, no JS required
@@ -387,6 +404,7 @@ PGP Everywhere (iOS):
 **Course Map (main content):**
 
 A vertical pathway of chapter cards connected by a visual line. Cards are ordered top to bottom. Each card:
+
 - Chapter number + title
 - One-line description
 - `<progress>` bar showing lesson completion
@@ -396,6 +414,7 @@ A vertical pathway of chapter cards connected by a visual line. Cards are ordere
 A "Continue where you left off" panel sticks near the top of the map if progress exists. It shows the last lesson with a direct `<a>` link. No JS — it's rendered server-side based on progress data.
 
 **Chapter order:**
+
 1. Your First Key
 2. Signing & Verifying
 3. Encryption
@@ -422,12 +441,12 @@ The app's top nav is replaced on lesson pages by a minimal header: back arrow (t
 - Hint system as `<details>` elements:
   ```html
   <details>
-    <summary>Need a hint? (costs 5 XP)</summary>
-    <p>First hint text...</p>
-    <details>
-      <summary>Another hint? (costs 10 XP more)</summary>
-      <p>Second hint...</p>
-    </details>
+  	<summary>Need a hint? (costs 5 XP)</summary>
+  	<p>First hint text...</p>
+  	<details>
+  		<summary>Another hint? (costs 10 XP more)</summary>
+  		<p>Second hint...</p>
+  	</details>
   </details>
   ```
   Hints are shown immediately on `<details>` open — no server round-trip. XP costs are deducted when the lesson is submitted (the form tracks which hints were opened via hidden inputs).
@@ -437,39 +456,45 @@ The app's top nav is replaced on lesson pages by a minimal header: back arrow (t
 The workspace is contextual to the challenge type. All workspaces are `<form method="POST">` elements.
 
 **sign-message workspace:**
+
 ```html
 <p>Sign this message with your PGP key:</p>
 <pre>{{ challenge.setup.plaintextToSign }}</pre>
 <!-- JS enhancement: copy button -->
 <label for="answer">Paste your signed output:</label>
-<textarea id="answer" name="answer" rows="10"
-  placeholder="-----BEGIN PGP SIGNED MESSAGE-----"></textarea>
-<input type="hidden" name="hintsUsed" value="{{ hintsUsed }}">
+<textarea
+	id="answer"
+	name="answer"
+	rows="10"
+	placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
+></textarea>
+<input type="hidden" name="hintsUsed" value="{{ hintsUsed }}" />
 <button type="submit">Submit →</button>
 ```
 
 **verify-signature workspace:**
+
 ```html
 <p>Verify this signed message with your PGP tool:</p>
 <pre>{{ challenge.setup.signatureToVerify }}</pre>
 <label for="answer">What does the message say?</label>
-<textarea id="answer" name="answer" rows="4"
-  placeholder="Type the message content here"></textarea>
+<textarea id="answer" name="answer" rows="4" placeholder="Type the message content here"></textarea>
 <button type="submit">Submit →</button>
 ```
 
 **encrypt-message workspace:**
+
 ```html
 <p>Encrypt this message to the following public key:</p>
 <pre class="key-block">{{ challenge.setup.recipientPublicKey }}</pre>
 <p>Message to encrypt: <code>{{ challenge.setup.plaintextToSign }}</code></p>
 <label for="answer">Paste your encrypted output:</label>
-<textarea id="answer" name="answer" rows="10"
-  placeholder="-----BEGIN PGP MESSAGE-----"></textarea>
+<textarea id="answer" name="answer" rows="10" placeholder="-----BEGIN PGP MESSAGE-----"></textarea>
 <button type="submit">Submit →</button>
 ```
 
 **decrypt-message workspace:**
+
 ```html
 <p>Decrypt this message using your private key:</p>
 <pre>{{ challenge.setup.ciphertextToDecrypt }}</pre>
@@ -479,15 +504,16 @@ The workspace is contextual to the challenge type. All workspaces are `<form met
 ```
 
 **quiz workspace:**
+
 ```html
 <fieldset>
-  <legend>{{ challenge.prompt }}</legend>
-  {% for option in challenge.quizOptions %}
-  <label>
-    <input type="radio" name="answer" value="{{ loop.index }}">
-    {{ option }}
-  </label>
-  {% endfor %}
+	<legend>{{ challenge.prompt }}</legend>
+	{% for option in challenge.quizOptions %}
+	<label>
+		<input type="radio" name="answer" value="{{ loop.index }}" />
+		{{ option }}
+	</label>
+	{% endfor %}
 </fieldset>
 <button type="submit">Submit →</button>
 ```
@@ -508,21 +534,24 @@ With JS available (`use:enhance`), the redirect is intercepted and feedback rend
 **Layout:** Single column, max-width 800px, centered.
 
 **Profile Header:**
+
 - Fingerprint (JetBrains Mono, formatted in groups of 4, centered, large)
 - Display name (editable via a small form action — pencil icon, JS enhancement for inline edit, falls back to a separate edit form)
 - Level badge
 - XP total
 
 **Privacy Toggle:** A `<form method="POST">` with a checkbox:
+
 ```html
 <form method="POST" action="?/setVisibility">
-  <label>
-    <input type="checkbox" name="public" {{ checked if profile.public }}>
-    Make my profile public
-  </label>
-  <button type="submit">Save</button>
+	<label>
+		<input type="checkbox" name="public" {{ checked if profile.public }} />
+		Make my profile public
+	</label>
+	<button type="submit">Save</button>
 </form>
 ```
+
 Defaults to unchecked (private). Opt-in to public sharing, never opt-out.
 
 When public: `Your profile is visible at /profile/{{ fingerprint }}`. When private: `Only you can see this page.`
@@ -530,6 +559,7 @@ When public: `Your profile is visible at /profile/{{ fingerprint }}`. When priva
 **Achievements Grid:** 3-column on desktop, 2-column on mobile.
 
 Each badge:
+
 - Badge icon (48px, illustrative)
 - Achievement name
 - Date earned, or gray + padlock if locked
@@ -545,6 +575,7 @@ Locked badges show title only, not description — deliberate mystery (Zeigarnik
 **Layout:** Single column, max-width 680px. Sections separated by `<hr>` dividers.
 
 **Section 1 — Your Key:**
+
 - Full fingerprint, formatted in groups of 4
 - Algorithm info (e.g. "RSA 4096-bit, created 2024-03-15")
 - `<details><summary>Show public key</summary><pre>...</pre></details>` with a "Download .asc" link below
@@ -553,11 +584,13 @@ Locked badges show title only, not description — deliberate mystery (Zeigarnik
 
 ```html
 <form method="POST" action="?/deregister">
-  <p>Deregistering removes your progress from this app.
-     It does not delete or change your PGP key in any way.</p>
-  <label for="confirm">Type DEREGISTER to confirm:</label>
-  <input id="confirm" name="confirm" type="text" autocomplete="off">
-  <button type="submit">Deregister this key</button>
+	<p>
+		Deregistering removes your progress from this app. It does not delete or change your PGP key in
+		any way.
+	</p>
+	<label for="confirm">Type DEREGISTER to confirm:</label>
+	<input id="confirm" name="confirm" type="text" autocomplete="off" />
+	<button type="submit">Deregister this key</button>
 </form>
 ```
 
@@ -569,39 +602,40 @@ The form action checks that `confirm === 'DEREGISTER'` before proceeding. Return
 
 ### XP System
 
-| Action | XP |
-|---|---|
-| Complete challenge (1st attempt) | 50 |
-| Complete challenge (2nd attempt) | 35 |
-| Complete challenge (3rd+ attempt) | 20 |
-| Complete a chapter | +200 bonus |
-| No hints used in chapter | +100 bonus |
+| Action                            | XP         |
+| --------------------------------- | ---------- |
+| Complete challenge (1st attempt)  | 50         |
+| Complete challenge (2nd attempt)  | 35         |
+| Complete challenge (3rd+ attempt) | 20         |
+| Complete a chapter                | +200 bonus |
+| No hints used in chapter          | +100 bonus |
 | Perfect chapter (all 1st-attempt) | +150 bonus |
-| Daily return (any activity) | +25 |
+| Daily return (any activity)       | +25        |
 
 XP never decreases. The "penalty" for hints is not earning the bonus — a regret mechanic, not a punishment.
 
 ### Levels
 
-| Level | XP | Title |
-|---|---|---|
-| 1 | 0 | Curious Beginner |
-| 2 | 200 | Key Holder |
-| 3 | 500 | Apprentice |
-| 4 | 1,000 | Signer |
-| 5 | 1,800 | Encryptor |
-| 6 | 2,800 | Verifier |
-| 7 | 4,200 | Web Weaver |
-| 8 | 6,000 | Key Custodian |
-| 9 | 8,500 | Trusted Signer |
-| 10 | 12,000 | Cryptographer |
-| 11+ | +4,000/level | Distinguished Cryptographer |
+| Level | XP           | Title                       |
+| ----- | ------------ | --------------------------- |
+| 1     | 0            | Curious Beginner            |
+| 2     | 200          | Key Holder                  |
+| 3     | 500          | Apprentice                  |
+| 4     | 1,000        | Signer                      |
+| 5     | 1,800        | Encryptor                   |
+| 6     | 2,800        | Verifier                    |
+| 7     | 4,200        | Web Weaver                  |
+| 8     | 6,000        | Key Custodian               |
+| 9     | 8,500        | Trusted Signer              |
+| 10    | 12,000       | Cryptographer               |
+| 11+   | +4,000/level | Distinguished Cryptographer |
 
 Completing all five chapters earns approximately 2,800–4,200 XP (level ~7).
 
 ### Achievement Definitions
 
 **Learning:**
+
 - `first_lesson` — Complete your first lesson
 - `chapter_1_complete` through `chapter_5_complete` — One per chapter
 - `all_chapters_complete` — Complete the entire curriculum
@@ -609,6 +643,7 @@ Completing all five chapters earns approximately 2,800–4,200 XP (level ~7).
 - `graduate` — Complete Chapter 5
 
 **Skill:**
+
 - `first_signature` — Successfully sign your first message
 - `first_verification` — Verify your first signed message
 - `first_encryption` — Encrypt your first message
@@ -617,10 +652,12 @@ Completing all five chapters earns approximately 2,800–4,200 XP (level ~7).
 - `key_publisher` — Complete the key server lesson
 
 **Community:**
+
 - `open_book` — Make your profile public
 - `ambassador` — Share your profile link (detected by button click with JS; one-time, honesty-based)
 
 **Special (hidden — title shown, description hidden until earned):**
+
 - `persistence` — Attempt a challenge 5+ times before succeeding
 - `night_owl` — Complete a lesson after midnight (local time, inferred from submission timestamp)
 - `paranoid_compliment` — Complete the entire tutorial using only external tools (never opened a `<details>` hint)
@@ -707,20 +744,20 @@ A knowledgeable friend who happens to be a security researcher. Not a professor,
 
 ### Approved Analogies (use consistently throughout)
 
-| Concept | Analogy |
-|---|---|
-| Public key | "Your mailbox slot — anyone can drop a letter in" |
-| Private key | "The key that opens your mailbox" |
-| Key pair | "Two keys: one you share with the world, one you keep secret" |
-| Encryption | "Locking a letter in a box only the recipient can open" |
-| Decryption | "Opening a box you received, using your private key" |
-| Digital signature | "A wax seal on a letter — proves who sent it and that it wasn't tampered with" |
-| Signature verification | "Checking the wax seal is genuine" |
-| Key fingerprint | "A short summary of your key — like a phone number for your identity" |
-| Web of trust | "Vouching for friends: if I trust Alice and Alice trusts Bob, I have some reason to trust Bob" |
-| Key server | "A public phonebook for PGP keys" |
-| ASCII armor | "Turning your key's binary data into letters you can copy-paste" |
-| Passphrase | "A lock on your key file — even if someone steals the file, they need this too" |
+| Concept                | Analogy                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| Public key             | "Your mailbox slot — anyone can drop a letter in"                                              |
+| Private key            | "The key that opens your mailbox"                                                              |
+| Key pair               | "Two keys: one you share with the world, one you keep secret"                                  |
+| Encryption             | "Locking a letter in a box only the recipient can open"                                        |
+| Decryption             | "Opening a box you received, using your private key"                                           |
+| Digital signature      | "A wax seal on a letter — proves who sent it and that it wasn't tampered with"                 |
+| Signature verification | "Checking the wax seal is genuine"                                                             |
+| Key fingerprint        | "A short summary of your key — like a phone number for your identity"                          |
+| Web of trust           | "Vouching for friends: if I trust Alice and Alice trusts Bob, I have some reason to trust Bob" |
+| Key server             | "A public phonebook for PGP keys"                                                              |
+| ASCII armor            | "Turning your key's binary data into letters you can copy-paste"                               |
+| Passphrase             | "A lock on your key file — even if someone steals the file, they need this too"                |
 
 ### Key Copy Moments
 
@@ -748,56 +785,56 @@ A knowledgeable friend who happens to be a security researcher. Not a professor,
 
 ### Layout
 
-| Component | Purpose |
-|---|---|
-| `AppHeader` | Top navigation; variants: `unauthenticated`, `authenticated`, `minimal` (login/register) |
-| `BottomTabBar` | Mobile authenticated navigation |
-| `FlashBanner` | Server-rendered flash message; variants: `success`, `error`, `achievement`, `info`; auto-dismisses with JS |
-| `PageContainer` | Max-width wrapper; variants: `wide` (1200px), `default` (800px), `narrow` (640px) |
-| `TwoPanel` | 50/50 horizontal split; collapses to `:target` tabs on mobile |
-| `Footer` | Minimal footer with privacy note |
+| Component       | Purpose                                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------------------- |
+| `AppHeader`     | Top navigation; variants: `unauthenticated`, `authenticated`, `minimal` (login/register)                   |
+| `BottomTabBar`  | Mobile authenticated navigation                                                                            |
+| `FlashBanner`   | Server-rendered flash message; variants: `success`, `error`, `achievement`, `info`; auto-dismisses with JS |
+| `PageContainer` | Max-width wrapper; variants: `wide` (1200px), `default` (800px), `narrow` (640px)                          |
+| `TwoPanel`      | 50/50 horizontal split; collapses to `:target` tabs on mobile                                              |
+| `Footer`        | Minimal footer with privacy note                                                                           |
 
 ### Cards & Display
 
-| Component | Purpose |
-|---|---|
-| `ChapterCard` | Dashboard course map card; variants: `locked`, `in-progress`, `completed` |
-| `LessonCard` | Chapter overview lesson list item |
-| `AchievementBadge` | Badge icon + name + date; variants: `earned`, `locked` |
-| `FingerprintDisplay` | Monospace fingerprint; variants: `full`, `short` (8 chars), `large` |
-| `KeyDisplayBlock` | Armored key in `<details><summary>` with download link; variants: `public` |
-| `InfoBox` | Callout/explainer; variants: `info`, `warning`, `success`, `danger` |
-| `LevelBadge` | Level number + title; variants: `compact`, `large` |
+| Component            | Purpose                                                                    |
+| -------------------- | -------------------------------------------------------------------------- |
+| `ChapterCard`        | Dashboard course map card; variants: `locked`, `in-progress`, `completed`  |
+| `LessonCard`         | Chapter overview lesson list item                                          |
+| `AchievementBadge`   | Badge icon + name + date; variants: `earned`, `locked`                     |
+| `FingerprintDisplay` | Monospace fingerprint; variants: `full`, `short` (8 chars), `large`        |
+| `KeyDisplayBlock`    | Armored key in `<details><summary>` with download link; variants: `public` |
+| `InfoBox`            | Callout/explainer; variants: `info`, `warning`, `success`, `danger`        |
+| `LevelBadge`         | Level number + title; variants: `compact`, `large`                         |
 
 ### Forms & Inputs
 
-| Component | Purpose |
-|---|---|
-| `MonoTextarea` | JetBrains Mono textarea for PGP content |
-| `TextInput` | Standard labeled text input with error state |
-| `CopyBlock` | `<pre>` with optional JS copy button; keyboard-selectable fallback |
-| `FileInput` | `<input type="file">` with optional JS drag-drop zone |
-| `ProgressBar` | CSS-styled `<progress>` element; variants: `xp`, `lesson`, `chapter` |
+| Component      | Purpose                                                              |
+| -------------- | -------------------------------------------------------------------- |
+| `MonoTextarea` | JetBrains Mono textarea for PGP content                              |
+| `TextInput`    | Standard labeled text input with error state                         |
+| `CopyBlock`    | `<pre>` with optional JS copy button; keyboard-selectable fallback   |
+| `FileInput`    | `<input type="file">` with optional JS drag-drop zone                |
+| `ProgressBar`  | CSS-styled `<progress>` element; variants: `xp`, `lesson`, `chapter` |
 
 ### Workspaces (all are `<form method="POST">` elements)
 
-| Component | Challenge Type |
-|---|---|
-| `SignWorkspace` | `sign-message` |
-| `VerifyWorkspace` | `verify-signature` |
-| `EncryptWorkspace` | `encrypt-message` |
-| `DecryptWorkspace` | `decrypt-message` |
-| `QuizWorkspace` | `quiz` |
+| Component            | Challenge Type                                         |
+| -------------------- | ------------------------------------------------------ |
+| `SignWorkspace`      | `sign-message`                                         |
+| `VerifyWorkspace`    | `verify-signature`                                     |
+| `EncryptWorkspace`   | `encrypt-message`                                      |
+| `DecryptWorkspace`   | `decrypt-message`                                      |
+| `QuizWorkspace`      | `quiz`                                                 |
 | `ExplainerWorkspace` | `explainer` (just a submit button: "Mark as complete") |
 
 ### Feedback & Navigation
 
-| Component | Purpose |
-|---|---|
-| `FeedbackPanel` | Inline correct/incorrect result; rendered server-side on redirect; enhanced with JS |
-| `StepIndicator` | Numbered step tracker for multi-step flows (login, onboarding) |
-| `BreadcrumbTrail` | Chapter > Lesson navigation |
-| `LessonProgressBar` | Segmented bar: one segment per challenge in the lesson |
+| Component           | Purpose                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| `FeedbackPanel`     | Inline correct/incorrect result; rendered server-side on redirect; enhanced with JS |
+| `StepIndicator`     | Numbered step tracker for multi-step flows (login, onboarding)                      |
+| `BreadcrumbTrail`   | Chapter > Lesson navigation                                                         |
+| `LessonProgressBar` | Segmented bar: one segment per challenge in the lesson                              |
 
 ---
 
@@ -813,8 +850,8 @@ Full mobile support. Users on Android use OpenKeychain; users on iOS use PGP Eve
 
 ```html
 <nav class="lesson-tabs">
-  <a href="#instruction" aria-label="Instruction panel">Learn</a>
-  <a href="#workspace" aria-label="Workspace panel">Do</a>
+	<a href="#instruction" aria-label="Instruction panel">Learn</a>
+	<a href="#workspace" aria-label="Workspace panel">Do</a>
 </nav>
 <section id="instruction"><!-- lesson content --></section>
 <section id="workspace"><!-- challenge form --></section>
@@ -822,21 +859,31 @@ Full mobile support. Users on Android use OpenKeychain; users on iOS use PGP Eve
 
 ```css
 @media (max-width: 768px) {
-  #workspace { display: none; }
-  #workspace:target { display: block; }
-  #instruction:target { display: block; }
-  #instruction:not(:target):not(:has(~ #workspace:target)) { display: block; }
+	#workspace {
+		display: none;
+	}
+	#workspace:target {
+		display: block;
+	}
+	#instruction:target {
+		display: block;
+	}
+	#instruction:not(:target):not(:has(~ #workspace:target)) {
+		display: block;
+	}
 }
 ```
 
 Default shows the instruction panel. Tapping "Do" navigates to `#workspace`.
 
 **Key/nonce display on mobile:**
+
 - PGP blocks in horizontally-scrolling `<pre>` elements — `overflow-x: auto`
 - Download button prioritised over copy button (more reliable on mobile)
 - Minimum font size: 14px for monospace (smaller is unreadable on mobile)
 
 **Form inputs on mobile:**
+
 - All textareas: minimum height 120px
 - Visible "Select all" text above long PGP blocks (platform convention not always clear)
 - Submit button: full width, minimum height 48px (WCAG touch target)
@@ -860,16 +907,16 @@ The app requires a network connection (it is server-rendered). However, because 
 
 ## 10. Design Decisions Log
 
-| Decision | Choice | Reason |
-|---|---|---|
-| No in-app key generation | Users bring their own keys | Never handle private keys; teaches real-world tools |
-| No client-side JS requirement | All flows work via native HTML forms | Resilience, privacy (no JS = no potential client-side leak), ideological alignment |
-| `<details>/<summary>` for collapsibles | Native HTML | Works without JS; keyboard accessible by default; browser-rendered |
-| CSS `:target` for mobile tabs | CSS only | Works without JS; simple; degrades gracefully |
-| Flash banners over toast notifications | Server-rendered | Allows achievement notifications without JS |
-| Server-side Markdown rendering | No client-side parser | No JS bundle; content renders in initial HTML |
-| Self-hosted fonts | No Google Fonts CDN | No third-party requests; satisfies strict CSP; privacy |
-| `<progress>` for progress bars | Semantic HTML | Native accessibility; CSS-styleable; no JS needed |
-| Form actions over fetch-to-API | SvelteKit form actions | No-JS baseline; `use:enhance` adds enhancement on top |
-| Quiz answers server-side only | Never in PageData | Prevents client bundle inspection for answers |
-| Fingerprint as identity, non-unique display names | Keep it simple | Fingerprint is already globally unique; display names are cosmetic |
+| Decision                                          | Choice                               | Reason                                                                             |
+| ------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| No in-app key generation                          | Users bring their own keys           | Never handle private keys; teaches real-world tools                                |
+| No client-side JS requirement                     | All flows work via native HTML forms | Resilience, privacy (no JS = no potential client-side leak), ideological alignment |
+| `<details>/<summary>` for collapsibles            | Native HTML                          | Works without JS; keyboard accessible by default; browser-rendered                 |
+| CSS `:target` for mobile tabs                     | CSS only                             | Works without JS; simple; degrades gracefully                                      |
+| Flash banners over toast notifications            | Server-rendered                      | Allows achievement notifications without JS                                        |
+| Server-side Markdown rendering                    | No client-side parser                | No JS bundle; content renders in initial HTML                                      |
+| Self-hosted fonts                                 | No Google Fonts CDN                  | No third-party requests; satisfies strict CSP; privacy                             |
+| `<progress>` for progress bars                    | Semantic HTML                        | Native accessibility; CSS-styleable; no JS needed                                  |
+| Form actions over fetch-to-API                    | SvelteKit form actions               | No-JS baseline; `use:enhance` adds enhancement on top                              |
+| Quiz answers server-side only                     | Never in PageData                    | Prevents client bundle inspection for answers                                      |
+| Fingerprint as identity, non-unique display names | Keep it simple                       | Fingerprint is already globally unique; display names are cosmetic                 |

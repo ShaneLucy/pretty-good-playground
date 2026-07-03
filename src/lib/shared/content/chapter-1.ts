@@ -34,15 +34,15 @@ Read this, mark it done, and move on. The next lesson digs into how to identify 
 		{
 			id: 'ch1-l2',
 			title: 'Key anatomy — fingerprints and key IDs',
-			description: 'Learn to identify your key by its fingerprint — the 40-character summary that makes it unique.',
+			description:
+				'Learn to identify your key by its fingerprint — the 40-character summary that makes it unique.',
 			xpReward: 25,
 			challenges: [
 				{
 					id: 'ch1-l2-c1',
 					setup: {
 						type: 'quiz' as const,
-						question:
-							'What is a PGP key fingerprint?',
+						question: 'What is a PGP key fingerprint?',
 						options: [
 							'A short summary of your key that uniquely identifies it',
 							'A password that protects your private key from unauthorized use',
@@ -90,8 +90,7 @@ The output is your public key. You can share this anywhere. Posting it publicly 
 					id: 'ch1-l3-c2',
 					setup: {
 						type: 'quiz' as const,
-						question:
-							'What is the primary purpose of sharing your PGP public key with someone?',
+						question: 'What is the primary purpose of sharing your PGP public key with someone?',
 						options: [
 							'To let them log in to systems on your behalf',
 							'To allow them to verify your identity documents',

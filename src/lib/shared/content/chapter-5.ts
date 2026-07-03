@@ -33,7 +33,8 @@ const chapter5 = {
 		{
 			id: 'ch5-l2',
 			title: 'Key expiry and rotation',
-			description: 'Why PGP keys expire, how to extend them, and when to generate a new key instead.',
+			description:
+				'Why PGP keys expire, how to extend them, and when to generate a new key instead.',
 			xpReward: 25,
 			challenges: [
 				{
@@ -80,8 +81,7 @@ If your key has been compromised — even slightly suspected — do not extend i
 		{
 			id: 'ch5-l3',
 			title: 'PGP in email clients',
-			description:
-				'How to use PGP with Thunderbird, Apple Mail, and other common email clients.',
+			description: 'How to use PGP with Thunderbird, Apple Mail, and other common email clients.',
 			xpReward: 10,
 			challenges: [
 				{

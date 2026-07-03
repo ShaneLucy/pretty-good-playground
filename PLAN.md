@@ -2,7 +2,7 @@
 
 A phased, dependency-ordered build plan. Each phase has a **Goal**, an ordered **Task list**, its hard **Depends on**, and **Done when** acceptance criteria.
 
-This plan sequences the work only — it does not restate design or architecture. For the *what* and *why* of any item, read:
+This plan sequences the work only — it does not restate design or architecture. For the _what_ and _why_ of any item, read:
 
 - `ARCHITECTURE.md` — tech stack, auth, KV schema, rate limiting, routes, content model, deployment. §11 is the "critical files" ordering this plan follows.
 - `DESIGN.md` — design language, components (§8), screen specs (§4), gamification (§5), accessibility (§6).

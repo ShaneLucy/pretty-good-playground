@@ -171,9 +171,7 @@ export async function completeChallenge(params: {
 		chapters.every(
 			(c) =>
 				c.id === chapterId ||
-				c.lessons.every((l) =>
-					l.challenges.every((ch) => updatedChallenges.includes(ch.id))
-				)
+				c.lessons.every((l) => l.challenges.every((ch) => updatedChallenges.includes(ch.id)))
 		);
 
 	const newXp = current.xp + xp;

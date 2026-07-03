@@ -44,8 +44,7 @@
 		class:form-textarea--error={!!error}
 		aria-required={required ? 'true' : undefined}
 		aria-invalid={error ? 'true' : undefined}
-		aria-describedby={describedBy}
-	></textarea>
+		aria-describedby={describedBy}></textarea>
 
 	{#if error}
 		<p id={errorId} class="form-error" role="alert">{error}</p>

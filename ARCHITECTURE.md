@@ -42,7 +42,7 @@ bun add -D @sveltejs/adapter-cloudflare wrangler @cloudflare/workers-types
 
 A user's identity is their OpenPGP public key fingerprint — 40 hex characters. No username, email address, or password is involved. The fingerprint is the primary key for all KV lookups.
 
-**Why the challenge/response is secure:** Having someone's public key gives an attacker zero ability to impersonate them. The public key can *verify* signatures but cannot *create* them. Only the holder of the corresponding private key can produce a valid signature over the server's nonce. The attack "submit Alice's public key and log in as Alice" fails at the signing step — the attacker cannot sign the nonce without Alice's private key.
+**Why the challenge/response is secure:** Having someone's public key gives an attacker zero ability to impersonate them. The public key can _verify_ signatures but cannot _create_ them. Only the holder of the corresponding private key can produce a valid signature over the server's nonce. The attack "submit Alice's public key and log in as Alice" fails at the signing step — the attacker cannot sign the nonce without Alice's private key.
 
 ### No In-App Key Generation
 
@@ -111,6 +111,7 @@ Sessions are stateless JWTs. Payload: `{ sub: fingerprint }` plus standard claim
 **Session duration: 30 days.** Re-authentication requires the user to fire up their PGP tool, sign a challenge, and paste the result — a significant UX burden. 30 days is pragmatic. The `HttpOnly; SameSite=Strict` cookie combined with the strict CSP limits the realistic theft surface to XSS (mitigated by CSP) and physical device access.
 
 The login form includes a "Remember this device" checkbox, checked by default:
+
 - Checked → 30-day cookie
 - Unchecked → session cookie (cleared when browser closes)
 
@@ -130,9 +131,9 @@ Two namespaces: `MAIN_KV` (permanent) and `EPHEMERAL_KV` (short-lived). All keys
 
 ```jsonc
 {
-  "publicKey": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n...",
-  "registeredAt": "2025-01-15T10:00:00.000Z",
-  "displayName": "Alice"     // user-chosen at registration, non-unique
+	"publicKey": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n...",
+	"registeredAt": "2025-01-15T10:00:00.000Z",
+	"displayName": "Alice" // user-chosen at registration, non-unique
 }
 ```
 
@@ -142,13 +143,13 @@ Display names are non-unique. The fingerprint is the canonical identity. Public 
 
 ```jsonc
 {
-  "completedLessons": ["ch1-l1", "ch1-l2"],
-  "completedChallenges": ["ch1-l1-c1", "ch1-l2-c1"],
-  "xp": 420,
-  "achievements": ["first_lesson", "chapter_1_complete"],
-  "lastActive": "2025-07-01T14:23:00.000Z",
-  "streakDays": 3,
-  "streakLastDate": "2025-07-01"
+	"completedLessons": ["ch1-l1", "ch1-l2"],
+	"completedChallenges": ["ch1-l1-c1", "ch1-l2-c1"],
+	"xp": 420,
+	"achievements": ["first_lesson", "chapter_1_complete"],
+	"lastActive": "2025-07-01T14:23:00.000Z",
+	"streakDays": 3,
+	"streakLastDate": "2025-07-01"
 }
 ```
 
@@ -213,12 +214,12 @@ Race conditions are acceptable — rate limiting is best-effort, not a hard guar
 
 **Per-endpoint limits:**
 
-| Endpoint / Action | Identifier | Limit | Window |
-|---|---|---|---|
-| Login step 1 form action | IP | 10 | 1 min |
-| Login step 2 form action | IP | 10 | 1 min |
-| Register form action | IP | 5 | 1 min |
-| Challenge submit form action | Fingerprint | 30 | 1 min |
+| Endpoint / Action            | Identifier  | Limit | Window |
+| ---------------------------- | ----------- | ----- | ------ |
+| Login step 1 form action     | IP          | 10    | 1 min  |
+| Login step 2 form action     | IP          | 10    | 1 min  |
+| Register form action         | IP          | 5     | 1 min  |
+| Challenge submit form action | Fingerprint | 30    | 1 min  |
 
 **Implementation:** `src/lib/server/rate-limit.ts` exports `rateLimit(kv, endpoint, identifier, limit)`. Called at the top of each form action before any business logic.
 
@@ -345,51 +346,51 @@ Content lives in `src/lib/shared/content/*.ts`, bundled at build time. Never sto
 
 ```typescript
 type ChallengeType =
-  | 'explainer'           // Read content and mark done; no answer needed
-  | 'quiz'                // Multiple-choice; correct answer lives server-side only
-  | 'sign-message'        // User signs provided plaintext with their tool, pastes result
-  | 'verify-signature'    // User verifies provided signed message, pastes extracted text
-  | 'encrypt-message'     // User encrypts to challenge keypair's public key, pastes ciphertext
-  | 'decrypt-message'     // User decrypts server-encrypted ciphertext, pastes plaintext
-  | 'sign-key';           // User signs another key (web of trust exercise)
+	| 'explainer' // Read content and mark done; no answer needed
+	| 'quiz' // Multiple-choice; correct answer lives server-side only
+	| 'sign-message' // User signs provided plaintext with their tool, pastes result
+	| 'verify-signature' // User verifies provided signed message, pastes extracted text
+	| 'encrypt-message' // User encrypts to challenge keypair's public key, pastes ciphertext
+	| 'decrypt-message' // User decrypts server-encrypted ciphertext, pastes plaintext
+	| 'sign-key'; // User signs another key (web of trust exercise)
 
 interface ChallengeSetup {
-  recipientPublicKey?: string;   // Armored public key for encrypt-message tasks
-  ciphertextToDecrypt?: string;  // Armored ciphertext for decrypt-message tasks
-  signatureToVerify?: string;    // Armored signed message for verify tasks
-  plaintextToSign?: string;      // Plaintext to sign for sign-message tasks
-  signerPublicKey?: string;      // Public key to verify against for verify tasks
+	recipientPublicKey?: string; // Armored public key for encrypt-message tasks
+	ciphertextToDecrypt?: string; // Armored ciphertext for decrypt-message tasks
+	signatureToVerify?: string; // Armored signed message for verify tasks
+	plaintextToSign?: string; // Plaintext to sign for sign-message tasks
+	signerPublicKey?: string; // Public key to verify against for verify tasks
 }
 
 interface Challenge {
-  id: string;                    // Globally unique, stable forever: 'ch1-l2-c1'
-  type: ChallengeType;
-  prompt: string;
-  setup?: ChallengeSetup;
-  quizOptions?: string[];        // Only for 'quiz' type
-  xpReward: number;
-  hint?: string;
-  // NEVER exposed to client bundle:
-  // correctOption and expectedPlaintext live in +page.server.ts load()
-  // only the fields needed for display are passed to PageData
+	id: string; // Globally unique, stable forever: 'ch1-l2-c1'
+	type: ChallengeType;
+	prompt: string;
+	setup?: ChallengeSetup;
+	quizOptions?: string[]; // Only for 'quiz' type
+	xpReward: number;
+	hint?: string;
+	// NEVER exposed to client bundle:
+	// correctOption and expectedPlaintext live in +page.server.ts load()
+	// only the fields needed for display are passed to PageData
 }
 
 interface Lesson {
-  id: string;                    // 'ch1-l2'
-  title: string;
-  slug: string;                  // URL segment
-  contentMarkdown: string;
-  challenge: Challenge;
+	id: string; // 'ch1-l2'
+	title: string;
+	slug: string; // URL segment
+	contentMarkdown: string;
+	challenge: Challenge;
 }
 
 interface Chapter {
-  id: string;                    // 'ch1'
-  number: number;
-  slug: string;
-  title: string;
-  description: string;
-  lessons: Lesson[];
-  prerequisiteChapterId?: string;
+	id: string; // 'ch1'
+	number: number;
+	slug: string;
+	title: string;
+	description: string;
+	lessons: Lesson[];
+	prerequisiteChapterId?: string;
 }
 ```
 
@@ -408,30 +409,35 @@ This is a service keypair, not a user keypair.
 ### Proposed Curriculum
 
 **Chapter 1 — Your First Key** (prerequisite: none)
+
 - L1: What is public-key cryptography? (explainer, 10 XP)
 - L2: Key anatomy — fingerprints and key IDs (quiz, 25 XP)
 - L3: Export and share your public key (explainer + quiz, 25 XP)
 - L4: Register your key with this app (sign-message: sign the registration nonce, 50 XP)
 
 **Chapter 2 — Signing & Verifying** (prerequisite: ch1)
+
 - L1: What is a digital signature? (explainer, 10 XP)
 - L2: Sign a message (sign-message, 75 XP)
 - L3: Verify a signature (verify-signature, 75 XP)
 - L4: Why signatures matter — non-repudiation (quiz, 25 XP)
 
 **Chapter 3 — Encryption** (prerequisite: ch2)
+
 - L1: Asymmetric encryption explained (explainer, 10 XP)
 - L2: Encrypt a message (encrypt-message, 75 XP)
 - L3: Decrypt a message (decrypt-message, 75 XP)
 - L4: Sign and encrypt together (combined challenge, 100 XP)
 
 **Chapter 4 — Trust & Identity** (prerequisite: ch3)
+
 - L1: The web of trust (explainer, 10 XP)
 - L2: Sign someone else's key (sign-key, 75 XP)
 - L3: Key servers — what they are and the choice to use them (explainer → user choice: attempt upload or skip with no penalty, 25 XP)
 - L4: Revocation certificates (quiz, 25 XP)
 
 **Chapter 5 — Real-World PGP** (prerequisite: ch4)
+
 - L1: Private key security and backups (quiz, 25 XP)
 - L2: Key expiry and rotation (explainer + quiz, 25 XP)
 - L3: PGP in email clients (explainer, 10 XP)
@@ -447,25 +453,25 @@ This is a service keypair, not a user keypair.
 
 ## 7. Client/Server Boundary
 
-| Operation | Location | Reason |
-|---|---|---|
-| Keypair generation | **User's own tool** (external) | App never touches private keys |
-| Message signing | **User's own tool** (external) | Private key required; never in browser |
-| Message encryption | **User's own tool** (external) | User encrypts to challenge keypair's public key |
-| Message decryption | **User's own tool** (external) | Private key required; never in browser |
-| Key parsing + fingerprint extraction | **Server only** | Authoritative identity resolution |
-| Nonce generation | **Server only** | Must be server-authoritative |
-| Signature verification (auth) | **Server only** | Client result is untrusted |
-| Signature verification (tutorial) | **Server only** | Authoritative answer grading |
-| Challenge ciphertext decryption | **Server only** | Uses challenge keypair private key |
-| JWT issuance | **Server only** | `JWT_SECRET` never leaves server |
-| Progress writes | **Server only** | Game state must be authoritative |
-| Progress reads | **Server-side SSR** | No client round-trip; typed `PageData` |
-| Tutorial content | **Server-side SSR** | Bundled; no KV read needed |
-| Quiz correct answers | **Server only** | Never included in `PageData` |
-| Copy-to-clipboard | **Client JS only** | Progressive enhancement; fallback is selectable `<pre>` |
-| Form submission without reload | **Client JS only** | `use:enhance` progressive enhancement |
-| Inline feedback (correct/incorrect) | **Client JS only** | Progressive enhancement; baseline is redirect + flash banner |
+| Operation                            | Location                       | Reason                                                       |
+| ------------------------------------ | ------------------------------ | ------------------------------------------------------------ |
+| Keypair generation                   | **User's own tool** (external) | App never touches private keys                               |
+| Message signing                      | **User's own tool** (external) | Private key required; never in browser                       |
+| Message encryption                   | **User's own tool** (external) | User encrypts to challenge keypair's public key              |
+| Message decryption                   | **User's own tool** (external) | Private key required; never in browser                       |
+| Key parsing + fingerprint extraction | **Server only**                | Authoritative identity resolution                            |
+| Nonce generation                     | **Server only**                | Must be server-authoritative                                 |
+| Signature verification (auth)        | **Server only**                | Client result is untrusted                                   |
+| Signature verification (tutorial)    | **Server only**                | Authoritative answer grading                                 |
+| Challenge ciphertext decryption      | **Server only**                | Uses challenge keypair private key                           |
+| JWT issuance                         | **Server only**                | `JWT_SECRET` never leaves server                             |
+| Progress writes                      | **Server only**                | Game state must be authoritative                             |
+| Progress reads                       | **Server-side SSR**            | No client round-trip; typed `PageData`                       |
+| Tutorial content                     | **Server-side SSR**            | Bundled; no KV read needed                                   |
+| Quiz correct answers                 | **Server only**                | Never included in `PageData`                                 |
+| Copy-to-clipboard                    | **Client JS only**             | Progressive enhancement; fallback is selectable `<pre>`      |
+| Form submission without reload       | **Client JS only**             | `use:enhance` progressive enhancement                        |
+| Inline feedback (correct/incorrect)  | **Client JS only**             | Progressive enhancement; baseline is redirect + flash banner |
 
 **No `openpgp.js` in the client bundle.** The browser never performs any cryptographic operations. `openpgp.js` is a server-only import.
 
@@ -475,36 +481,42 @@ This is a service keypair, not a user keypair.
 
 The no-JS baseline must be complete and usable. JavaScript, when present, improves comfort but is never required.
 
-| Feature | No-JS baseline | JS enhancement |
-|---|---|---|
-| Form submission | Full page reload | `use:enhance` — no reload, inline errors |
-| Copy nonce/text to clipboard | `<pre>` block, manual select-all | Copy button via Clipboard API |
-| Challenge feedback | Redirect + flash banner | Inline success/error panel without redirect |
-| Achievement notification | Flash banner on next page load | Non-blocking toast notification |
-| Collapsible sections (hints, instructions) | `<details><summary>` — native HTML | Optional: animated open/close |
-| Mobile lesson tabs (Instruction / Workspace) | CSS `:target` tab pattern | JS-managed tab state with aria-selected |
-| Progress bar animation | Static CSS `<progress>` fill | Animated fill transition on load |
-| Display name edit | Full form → redirect | Inline edit with immediate feedback |
-| Dark mode toggle | CSS `prefers-color-scheme` only | Optional JS-controlled class toggle |
-| Key file upload (drag and drop) | `<input type="file">` only | Drag-and-drop zone overlay |
+| Feature                                      | No-JS baseline                     | JS enhancement                              |
+| -------------------------------------------- | ---------------------------------- | ------------------------------------------- |
+| Form submission                              | Full page reload                   | `use:enhance` — no reload, inline errors    |
+| Copy nonce/text to clipboard                 | `<pre>` block, manual select-all   | Copy button via Clipboard API               |
+| Challenge feedback                           | Redirect + flash banner            | Inline success/error panel without redirect |
+| Achievement notification                     | Flash banner on next page load     | Non-blocking toast notification             |
+| Collapsible sections (hints, instructions)   | `<details><summary>` — native HTML | Optional: animated open/close               |
+| Mobile lesson tabs (Instruction / Workspace) | CSS `:target` tab pattern          | JS-managed tab state with aria-selected     |
+| Progress bar animation                       | Static CSS `<progress>` fill       | Animated fill transition on load            |
+| Display name edit                            | Full form → redirect               | Inline edit with immediate feedback         |
+| Dark mode toggle                             | CSS `prefers-color-scheme` only    | Optional JS-controlled class toggle         |
+| Key file upload (drag and drop)              | `<input type="file">` only         | Drag-and-drop zone overlay                  |
 
 ### CSS `:target` tab pattern (mobile lesson page)
 
 ```html
 <!-- Default: instruction tab is shown -->
 <nav>
-  <a href="#instruction">Learn</a>
-  <a href="#workspace">Do</a>
+	<a href="#instruction">Learn</a>
+	<a href="#workspace">Do</a>
 </nav>
 <section id="instruction">...</section>
 <section id="workspace">...</section>
 ```
 
 ```css
-#workspace { display: none; }
-#workspace:target { display: block; }
+#workspace {
+	display: none;
+}
+#workspace:target {
+	display: block;
+}
 #instruction:target ~ #workspace,
-#workspace:target ~ #instruction { display: none; }
+#workspace:target ~ #instruction {
+	display: none;
+}
 ```
 
 When JS is present, click handlers manage tab state and update `aria-selected` for screen readers.
@@ -564,28 +576,32 @@ PUBLIC_APP_URL = "https://pretty-good-playground.workers.dev"
 import type { KVNamespace } from '@cloudflare/workers-types';
 
 declare global {
-  namespace App {
-    interface Locals {
-      user: { fingerprint: string; displayName?: string } | null;
-      flash: { type: 'success' | 'error' | 'achievement' | 'info'; title: string; body?: string } | null;
-    }
-    interface PageData {
-      user: App.Locals['user'];
-      flash: App.Locals['flash'];
-    }
-    interface Platform {
-      env: {
-        MAIN_KV: KVNamespace;
-        EPHEMERAL_KV: KVNamespace;
-        JWT_SECRET: string;
-        CHALLENGE_PRIVATE_KEY: string;
-        CHALLENGE_KEY_PASSPHRASE: string;
-        PUBLIC_APP_URL: string;
-      };
-      context: { waitUntil(promise: Promise<unknown>): void; };
-      caches: CacheStorage & { default: Cache };
-    }
-  }
+	namespace App {
+		interface Locals {
+			user: { fingerprint: string; displayName?: string } | null;
+			flash: {
+				type: 'success' | 'error' | 'achievement' | 'info';
+				title: string;
+				body?: string;
+			} | null;
+		}
+		interface PageData {
+			user: App.Locals['user'];
+			flash: App.Locals['flash'];
+		}
+		interface Platform {
+			env: {
+				MAIN_KV: KVNamespace;
+				EPHEMERAL_KV: KVNamespace;
+				JWT_SECRET: string;
+				CHALLENGE_PRIVATE_KEY: string;
+				CHALLENGE_KEY_PASSPHRASE: string;
+				PUBLIC_APP_URL: string;
+			};
+			context: { waitUntil(promise: Promise<unknown>): void };
+			caches: CacheStorage & { default: Cache };
+		}
+	}
 }
 
 export {};
@@ -625,22 +641,22 @@ The app launches on the Workers free tier (100k reads/day, 1k writes/day). To ex
 
 ## 10. Resolved Decisions
 
-| Topic | Decision |
-|---|---|
-| Key generation | Not in-app. Users bring their own keys. `/resources` links to tools by platform. |
-| Client-side crypto | None. Browser is a clipboard UI only. |
-| Auth mechanism | PGP challenge/response via form actions. Two-step: `/login` then `/login/verify`. |
-| Auth security | Secure: possessing a public key is insufficient — the attacker cannot sign without the private key. |
-| Session duration | 30 days (default). Session-only if "Remember this device" is unchecked. |
-| User primary key | PGP fingerprint (40 hex chars). No separate UUID needed. |
-| Display names | User-chosen at registration. Non-unique — fingerprint is the canonical identity. |
-| No account recovery | Intentional. Teaches the importance of private key backups. |
-| Quiz answer exposure | Correct answers never leave the server. Validated in form actions only. |
-| Key servers | Chapter 4 explains key servers, then offers a genuine choice. No XP penalty to skip. |
-| Cryptocurrency/tokens | Not pursued. Regulatory risk and mission drift. XP remains the progression mechanic. |
+| Topic                  | Decision                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| Key generation         | Not in-app. Users bring their own keys. `/resources` links to tools by platform.                        |
+| Client-side crypto     | None. Browser is a clipboard UI only.                                                                   |
+| Auth mechanism         | PGP challenge/response via form actions. Two-step: `/login` then `/login/verify`.                       |
+| Auth security          | Secure: possessing a public key is insufficient — the attacker cannot sign without the private key.     |
+| Session duration       | 30 days (default). Session-only if "Remember this device" is unchecked.                                 |
+| User primary key       | PGP fingerprint (40 hex chars). No separate UUID needed.                                                |
+| Display names          | User-chosen at registration. Non-unique — fingerprint is the canonical identity.                        |
+| No account recovery    | Intentional. Teaches the importance of private key backups.                                             |
+| Quiz answer exposure   | Correct answers never leave the server. Validated in form actions only.                                 |
+| Key servers            | Chapter 4 explains key servers, then offers a genuine choice. No XP penalty to skip.                    |
+| Cryptocurrency/tokens  | Not pursued. Regulatory risk and mission drift. XP remains the progression mechanic.                    |
 | JavaScript requirement | JavaScript is never required. All core flows work via native HTML forms. JS is progressive enhancement. |
-| Mobile support | Full support. Links to OpenKeychain (Android) and PGP Everywhere (iOS). |
-| Content IDs | Permanent. Never rename or delete existing IDs — they exist in users' KV progress records. |
+| Mobile support         | Full support. Links to OpenKeychain (Android) and PGP Everywhere (iOS).                                 |
+| Content IDs            | Permanent. Never rename or delete existing IDs — they exist in users' KV progress records.              |
 
 ---
 
