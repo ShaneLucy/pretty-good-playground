@@ -1,0 +1,20 @@
+/*
+ * Fonts loaded via fontsource npm packages.
+ * Vite resolves bare package specifiers and emits the woff2 files as hashed
+ * build assets, satisfying the CSP font-src 'self' directive.
+ *
+ * Prerequisite: bun add @fontsource/plus-jakarta-sans @fontsource/inter @fontsource/jetbrains-mono
+ */
+
+/* ── Plus Jakarta Sans (display / headings) ─────────────────────────────── */
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+
+/* ── Inter (body text) ──────────────────────────────────────────────────── */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+
+/* ── JetBrains Mono (code / keys / PGP blocks) ──────────────────────────── */
+@import '@fontsource/jetbrains-mono/400.css';

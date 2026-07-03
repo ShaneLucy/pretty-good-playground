@@ -1,0 +1,19 @@
+name = "pretty-good-playground"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2025-01-01"
+
+# --- Secrets (set via `wrangler secret put <NAME>`, never committed here) ---
+#   JWT_SECRET               — signing key for session JWTs
+#   CHALLENGE_PRIVATE_KEY    — OpenPGP private key used for challenge signing
+#   CHALLENGE_KEY_PASSPHRASE — passphrase protecting CHALLENGE_PRIVATE_KEY
+# ---------------------------------------------------------------------------
+
+[vars]
+
+[[kv_namespaces]]
+binding = "MAIN_KV"
+id = "PLACEHOLDER_MAIN_KV_ID"
+
+[[kv_namespaces]]
+binding = "EPHEMERAL_KV"
+id = "PLACEHOLDER_EPHEMERAL_KV_ID"
