@@ -32,7 +32,6 @@
 		inline-size: 100%;
 		block-size: 8px;
 		appearance: none;
-		appearance: none;
 		border: none;
 		border-radius: var(--radius-full);
 		background-color: var(--color-gray-100);
