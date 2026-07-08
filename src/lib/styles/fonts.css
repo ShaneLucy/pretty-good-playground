@@ -7,14 +7,14 @@
  */
 
 /* ── Plus Jakarta Sans (display / headings) ─────────────────────────────── */
-@import url('@fontsource/plus-jakarta-sans/400.css');
-@import url('@fontsource/plus-jakarta-sans/500.css');
-@import url('@fontsource/plus-jakarta-sans/600.css');
-@import url('@fontsource/plus-jakarta-sans/700.css');
+@import url("@fontsource/plus-jakarta-sans/400.css");
+@import url("@fontsource/plus-jakarta-sans/500.css");
+@import url("@fontsource/plus-jakarta-sans/600.css");
+@import url("@fontsource/plus-jakarta-sans/700.css");
 
 /* ── Inter (body text) ──────────────────────────────────────────────────── */
-@import url('@fontsource/inter/400.css');
-@import url('@fontsource/inter/500.css');
+@import url("@fontsource/inter/400.css");
+@import url("@fontsource/inter/500.css");
 
 /* ── JetBrains Mono (code / keys / PGP blocks) ──────────────────────────── */
-@import url('@fontsource/jetbrains-mono/400.css');
+@import url("@fontsource/jetbrains-mono/400.css");

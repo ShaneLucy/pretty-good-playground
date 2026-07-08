@@ -131,9 +131,9 @@ Two namespaces: `MAIN_KV` (permanent) and `EPHEMERAL_KV` (short-lived). All keys
 
 ```jsonc
 {
-	"publicKey": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n...",
-	"registeredAt": "2025-01-15T10:00:00.000Z",
-	"displayName": "Alice" // user-chosen at registration, non-unique
+  "publicKey": "-----BEGIN PGP PUBLIC KEY BLOCK-----\n...",
+  "registeredAt": "2025-01-15T10:00:00.000Z",
+  "displayName": "Alice" // user-chosen at registration, non-unique
 }
 ```
 
@@ -143,13 +143,13 @@ Display names are non-unique. The fingerprint is the canonical identity. Public 
 
 ```jsonc
 {
-	"completedLessons": ["ch1-l1", "ch1-l2"],
-	"completedChallenges": ["ch1-l1-c1", "ch1-l2-c1"],
-	"xp": 420,
-	"achievements": ["first_lesson", "chapter_1_complete"],
-	"lastActive": "2025-07-01T14:23:00.000Z",
-	"streakDays": 3,
-	"streakLastDate": "2025-07-01"
+  "completedLessons": ["ch1-l1", "ch1-l2"],
+  "completedChallenges": ["ch1-l1-c1", "ch1-l2-c1"],
+  "xp": 420,
+  "achievements": ["first_lesson", "chapter_1_complete"],
+  "lastActive": "2025-07-01T14:23:00.000Z",
+  "streakDays": 3,
+  "streakLastDate": "2025-07-01"
 }
 ```
 
@@ -346,51 +346,51 @@ Content lives in `src/lib/shared/content/*.ts`, bundled at build time. Never sto
 
 ```typescript
 type ChallengeType =
-	| 'explainer' // Read content and mark done; no answer needed
-	| 'quiz' // Multiple-choice; correct answer lives server-side only
-	| 'sign-message' // User signs provided plaintext with their tool, pastes result
-	| 'verify-signature' // User verifies provided signed message, pastes extracted text
-	| 'encrypt-message' // User encrypts to challenge keypair's public key, pastes ciphertext
-	| 'decrypt-message' // User decrypts server-encrypted ciphertext, pastes plaintext
-	| 'sign-key'; // User signs another key (web of trust exercise)
+  | "explainer" // Read content and mark done; no answer needed
+  | "quiz" // Multiple-choice; correct answer lives server-side only
+  | "sign-message" // User signs provided plaintext with their tool, pastes result
+  | "verify-signature" // User verifies provided signed message, pastes extracted text
+  | "encrypt-message" // User encrypts to challenge keypair's public key, pastes ciphertext
+  | "decrypt-message" // User decrypts server-encrypted ciphertext, pastes plaintext
+  | "sign-key"; // User signs another key (web of trust exercise)
 
 interface ChallengeSetup {
-	recipientPublicKey?: string; // Armored public key for encrypt-message tasks
-	ciphertextToDecrypt?: string; // Armored ciphertext for decrypt-message tasks
-	signatureToVerify?: string; // Armored signed message for verify tasks
-	plaintextToSign?: string; // Plaintext to sign for sign-message tasks
-	signerPublicKey?: string; // Public key to verify against for verify tasks
+  recipientPublicKey?: string; // Armored public key for encrypt-message tasks
+  ciphertextToDecrypt?: string; // Armored ciphertext for decrypt-message tasks
+  signatureToVerify?: string; // Armored signed message for verify tasks
+  plaintextToSign?: string; // Plaintext to sign for sign-message tasks
+  signerPublicKey?: string; // Public key to verify against for verify tasks
 }
 
 interface Challenge {
-	id: string; // Globally unique, stable forever: 'ch1-l2-c1'
-	type: ChallengeType;
-	prompt: string;
-	setup?: ChallengeSetup;
-	quizOptions?: string[]; // Only for 'quiz' type
-	xpReward: number;
-	hint?: string;
-	// NEVER exposed to client bundle:
-	// correctOption and expectedPlaintext live in +page.server.ts load()
-	// only the fields needed for display are passed to PageData
+  id: string; // Globally unique, stable forever: 'ch1-l2-c1'
+  type: ChallengeType;
+  prompt: string;
+  setup?: ChallengeSetup;
+  quizOptions?: string[]; // Only for 'quiz' type
+  xpReward: number;
+  hint?: string;
+  // NEVER exposed to client bundle:
+  // correctOption and expectedPlaintext live in +page.server.ts load()
+  // only the fields needed for display are passed to PageData
 }
 
 interface Lesson {
-	id: string; // 'ch1-l2'
-	title: string;
-	slug: string; // URL segment
-	contentMarkdown: string;
-	challenge: Challenge;
+  id: string; // 'ch1-l2'
+  title: string;
+  slug: string; // URL segment
+  contentMarkdown: string;
+  challenge: Challenge;
 }
 
 interface Chapter {
-	id: string; // 'ch1'
-	number: number;
-	slug: string;
-	title: string;
-	description: string;
-	lessons: Lesson[];
-	prerequisiteChapterId?: string;
+  id: string; // 'ch1'
+  number: number;
+  slug: string;
+  title: string;
+  description: string;
+  lessons: Lesson[];
+  prerequisiteChapterId?: string;
 }
 ```
 
@@ -499,8 +499,8 @@ The no-JS baseline must be complete and usable. JavaScript, when present, improv
 ```html
 <!-- Default: instruction tab is shown -->
 <nav>
-	<a href="#instruction">Learn</a>
-	<a href="#workspace">Do</a>
+  <a href="#instruction">Learn</a>
+  <a href="#workspace">Do</a>
 </nav>
 <section id="instruction">...</section>
 <section id="workspace">...</section>
@@ -508,14 +508,14 @@ The no-JS baseline must be complete and usable. JavaScript, when present, improv
 
 ```css
 #workspace {
-	display: none;
+  display: none;
 }
 #workspace:target {
-	display: block;
+  display: block;
 }
 #instruction:target ~ #workspace,
 #workspace:target ~ #instruction {
-	display: none;
+  display: none;
 }
 ```
 
@@ -573,35 +573,35 @@ PUBLIC_APP_URL = "https://pretty-good-playground.workers.dev"
 ### `src/app.d.ts`
 
 ```typescript
-import type { KVNamespace } from '@cloudflare/workers-types';
+import type { KVNamespace } from "@cloudflare/workers-types";
 
 declare global {
-	namespace App {
-		interface Locals {
-			user: { fingerprint: string; displayName?: string } | null;
-			flash: {
-				type: 'success' | 'error' | 'achievement' | 'info';
-				title: string;
-				body?: string;
-			} | null;
-		}
-		interface PageData {
-			user: App.Locals['user'];
-			flash: App.Locals['flash'];
-		}
-		interface Platform {
-			env: {
-				MAIN_KV: KVNamespace;
-				EPHEMERAL_KV: KVNamespace;
-				JWT_SECRET: string;
-				CHALLENGE_PRIVATE_KEY: string;
-				CHALLENGE_KEY_PASSPHRASE: string;
-				PUBLIC_APP_URL: string;
-			};
-			context: { waitUntil(promise: Promise<unknown>): void };
-			caches: CacheStorage & { default: Cache };
-		}
-	}
+  namespace App {
+    interface Locals {
+      user: { fingerprint: string; displayName?: string } | null;
+      flash: {
+        type: "success" | "error" | "achievement" | "info";
+        title: string;
+        body?: string;
+      } | null;
+    }
+    interface PageData {
+      user: App.Locals["user"];
+      flash: App.Locals["flash"];
+    }
+    interface Platform {
+      env: {
+        MAIN_KV: KVNamespace;
+        EPHEMERAL_KV: KVNamespace;
+        JWT_SECRET: string;
+        CHALLENGE_PRIVATE_KEY: string;
+        CHALLENGE_KEY_PASSPHRASE: string;
+        PUBLIC_APP_URL: string;
+      };
+      context: { waitUntil(promise: Promise<unknown>): void };
+      caches: CacheStorage & { default: Cache };
+    }
+  }
 }
 
 export {};

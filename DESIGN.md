@@ -365,14 +365,14 @@ PGP Everywhere (iOS):
 
 ```html
 <form method="POST">
-	<label for="signed">Paste the signed output here</label>
-	<textarea
-		id="signed"
-		name="signed"
-		rows="12"
-		placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
-	></textarea>
-	<button type="submit">Verify →</button>
+  <label for="signed">Paste the signed output here</label>
+  <textarea
+    id="signed"
+    name="signed"
+    rows="12"
+    placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
+  ></textarea>
+  <button type="submit">Verify →</button>
 </form>
 ```
 
@@ -441,12 +441,12 @@ The app's top nav is replaced on lesson pages by a minimal header: back arrow (t
 - Hint system as `<details>` elements:
   ```html
   <details>
-  	<summary>Need a hint? (costs 5 XP)</summary>
-  	<p>First hint text...</p>
-  	<details>
-  		<summary>Another hint? (costs 10 XP more)</summary>
-  		<p>Second hint...</p>
-  	</details>
+    <summary>Need a hint? (costs 5 XP)</summary>
+    <p>First hint text...</p>
+    <details>
+      <summary>Another hint? (costs 10 XP more)</summary>
+      <p>Second hint...</p>
+    </details>
   </details>
   ```
   Hints are shown immediately on `<details>` open — no server round-trip. XP costs are deducted when the lesson is submitted (the form tracks which hints were opened via hidden inputs).
@@ -463,10 +463,10 @@ The workspace is contextual to the challenge type. All workspaces are `<form met
 <!-- JS enhancement: copy button -->
 <label for="answer">Paste your signed output:</label>
 <textarea
-	id="answer"
-	name="answer"
-	rows="10"
-	placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
+  id="answer"
+  name="answer"
+  rows="10"
+  placeholder="-----BEGIN PGP SIGNED MESSAGE-----"
 ></textarea>
 <input type="hidden" name="hintsUsed" value="{{ hintsUsed }}" />
 <button type="submit">Submit →</button>
@@ -507,13 +507,13 @@ The workspace is contextual to the challenge type. All workspaces are `<form met
 
 ```html
 <fieldset>
-	<legend>{{ challenge.prompt }}</legend>
-	{% for option in challenge.quizOptions %}
-	<label>
-		<input type="radio" name="answer" value="{{ loop.index }}" />
-		{{ option }}
-	</label>
-	{% endfor %}
+  <legend>{{ challenge.prompt }}</legend>
+  {% for option in challenge.quizOptions %}
+  <label>
+    <input type="radio" name="answer" value="{{ loop.index }}" />
+    {{ option }}
+  </label>
+  {% endfor %}
 </fieldset>
 <button type="submit">Submit →</button>
 ```
@@ -544,11 +544,11 @@ With JS available (`use:enhance`), the redirect is intercepted and feedback rend
 
 ```html
 <form method="POST" action="?/setVisibility">
-	<label>
-		<input type="checkbox" name="public" {{ checked if profile.public }} />
-		Make my profile public
-	</label>
-	<button type="submit">Save</button>
+  <label>
+    <input type="checkbox" name="public" {{ checked if profile.public }} />
+    Make my profile public
+  </label>
+  <button type="submit">Save</button>
 </form>
 ```
 
@@ -584,13 +584,13 @@ Locked badges show title only, not description — deliberate mystery (Zeigarnik
 
 ```html
 <form method="POST" action="?/deregister">
-	<p>
-		Deregistering removes your progress from this app. It does not delete or change your PGP key in
-		any way.
-	</p>
-	<label for="confirm">Type DEREGISTER to confirm:</label>
-	<input id="confirm" name="confirm" type="text" autocomplete="off" />
-	<button type="submit">Deregister this key</button>
+  <p>
+    Deregistering removes your progress from this app. It does not delete or change your PGP key in
+    any way.
+  </p>
+  <label for="confirm">Type DEREGISTER to confirm:</label>
+  <input id="confirm" name="confirm" type="text" autocomplete="off" />
+  <button type="submit">Deregister this key</button>
 </form>
 ```
 
@@ -850,8 +850,8 @@ Full mobile support. Users on Android use OpenKeychain; users on iOS use PGP Eve
 
 ```html
 <nav class="lesson-tabs">
-	<a href="#instruction" aria-label="Instruction panel">Learn</a>
-	<a href="#workspace" aria-label="Workspace panel">Do</a>
+  <a href="#instruction" aria-label="Instruction panel">Learn</a>
+  <a href="#workspace" aria-label="Workspace panel">Do</a>
 </nav>
 <section id="instruction"><!-- lesson content --></section>
 <section id="workspace"><!-- challenge form --></section>
@@ -859,18 +859,18 @@ Full mobile support. Users on Android use OpenKeychain; users on iOS use PGP Eve
 
 ```css
 @media (max-width: 768px) {
-	#workspace {
-		display: none;
-	}
-	#workspace:target {
-		display: block;
-	}
-	#instruction:target {
-		display: block;
-	}
-	#instruction:not(:target):not(:has(~ #workspace:target)) {
-		display: block;
-	}
+  #workspace {
+    display: none;
+  }
+  #workspace:target {
+    display: block;
+  }
+  #instruction:target {
+    display: block;
+  }
+  #instruction:not(:target):not(:has(~ #workspace:target)) {
+    display: block;
+  }
 }
 ```
 
