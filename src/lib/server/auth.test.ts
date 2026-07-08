@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { SignJWT } from 'jose';
-import { signJwt, verifyJwt } from './auth';
+import {
+	signJwt,
+	verifyJwt,
+	makeSessionCookie,
+	makePendingFpCookie,
+	clearSessionCookie,
+	clearPendingFpCookie
+} from './auth';
 
 const SECRET = 'test-secret-that-is-at-least-32-chars!!';
 
