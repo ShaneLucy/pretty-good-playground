@@ -1,17 +1,21 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <footer class="site-footer">
 	<div class="site-footer__inner">
 		<p class="site-footer__brand">
-			<a href="/" class="site-footer__logo">PGP Playground</a>
+			<a href={resolve('/')} class="site-footer__logo">PGP Playground</a>
 		</p>
 
 		<nav aria-label="Footer navigation" class="site-footer__nav">
-			<a href="/about">About</a>
+			<a href={resolve('/about')}>About</a>
 			<a href="https://github.com" rel="noopener noreferrer">
 				GitHub
 				<span class="sr-only">(opens in a new tab)</span>
 			</a>
-			<a href="/resources">Resources</a>
-			<a href="/lost-my-key">Lost your key?</a>
+			<a href={resolve('/resources')}>Resources</a>
+			<a href={resolve('/lost-my-key')}>Lost your key?</a>
 		</nav>
 
 		<p class="site-footer__privacy">
@@ -27,7 +31,7 @@
 		padding-block-end: var(--space-24);
 	}
 
-	@media (min-width: 768px) {
+	@media (width >= 768px) {
 		.site-footer {
 			padding-block-end: var(--space-12);
 		}
@@ -45,7 +49,7 @@
 		text-align: center;
 	}
 
-	@media (min-width: 640px) {
+	@media (width >= 640px) {
 		.site-footer__inner {
 			flex-direction: row;
 			justify-content: space-between;

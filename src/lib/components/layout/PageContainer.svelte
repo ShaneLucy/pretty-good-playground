@@ -20,7 +20,7 @@
 		inline-size: 100%;
 	}
 
-	@media (min-width: 640px) {
+	@media (width >= 640px) {
 		.page-container {
 			padding-inline: var(--space-6);
 		}

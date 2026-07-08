@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	interface Props {
 		variant: 'unauthenticated' | 'authenticated' | 'minimal';
 		user?: { displayName: string; fingerprint: string } | null;
@@ -9,29 +11,29 @@
 
 <header class="app-header">
 	<div class="app-header__inner">
-		<a href="/" class="app-header__logo" aria-label="Pretty Good Playground — home">
+		<a href={resolve('/')} class="app-header__logo" aria-label="Pretty Good Playground — home">
 			<span class="app-header__logo-text">PGP Playground</span>
 		</a>
 
 		{#if variant === 'unauthenticated'}
 			<nav aria-label="Main navigation" class="app-header__nav">
-				<a href="/about" class="nav-link">About</a>
-				<a href="/resources" class="nav-link">Resources</a>
-				<a href="/register" class="btn btn--primary btn--sm">Get Started →</a>
+				<a href={resolve('/about')} class="nav-link">About</a>
+				<a href={resolve('/resources')} class="nav-link">Resources</a>
+				<a href={resolve('/register')} class="btn btn--primary btn--sm">Get Started →</a>
 			</nav>
 		{:else if variant === 'authenticated'}
 			<nav aria-label="Main navigation" class="app-header__nav">
-				<a href="/dashboard" class="nav-link">Dashboard</a>
-				<a href="/profile" class="nav-link">
+				<a href={resolve('/dashboard')} class="nav-link">Dashboard</a>
+				<a href={resolve('/profile')} class="nav-link">
 					{#if user}
 						<span class="nav-link__user">{user.displayName}</span>
 					{:else}
 						Profile
 					{/if}
 				</a>
-				<a href="/keys" class="nav-link">Keys</a>
-				<a href="/about" class="nav-link">About</a>
-				<a href="/logout" class="btn btn--ghost btn--sm">Sign Out</a>
+				<a href={resolve('/keys')} class="nav-link">Keys</a>
+				<a href={resolve('/about')} class="nav-link">About</a>
+				<a href={resolve('/logout')} class="btn btn--ghost btn--sm">Sign Out</a>
 			</nav>
 		{/if}
 	</div>
@@ -103,7 +105,7 @@
 
 	@media (prefers-color-scheme: dark) {
 		.nav-link:hover {
-			background-color: rgba(255, 255, 255, 0.08);
+			background-color: rgb(255 255 255 / 8%);
 		}
 	}
 
@@ -114,7 +116,7 @@
 		white-space: nowrap;
 	}
 
-	@media (max-width: 767px) {
+	@media (width <= 767px) {
 		.app-header__nav .nav-link:not(.btn) {
 			display: none;
 		}

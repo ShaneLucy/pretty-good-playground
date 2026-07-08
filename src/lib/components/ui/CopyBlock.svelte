@@ -6,12 +6,8 @@
 
 	let { text, label }: Props = $props();
 
-	let mounted = $state(false);
+	let mounted = $derived(true);
 	let copied = $state(false);
-
-	$effect(() => {
-		mounted = true;
-	});
 
 	async function copyToClipboard() {
 		try {

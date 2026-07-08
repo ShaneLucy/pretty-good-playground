@@ -63,7 +63,7 @@
 
 	@media (prefers-color-scheme: dark) {
 		.details__summary:hover {
-			background-color: rgba(255, 255, 255, 0.05);
+			background-color: rgb(255 255 255 / 5%);
 		}
 	}
 
@@ -85,6 +85,7 @@
 				opacity: 0;
 				transform: translateY(-4px);
 			}
+
 			to {
 				opacity: 1;
 				transform: translateY(0);

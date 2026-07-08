@@ -50,12 +50,15 @@
 		.info-box--info {
 			color: #7dd3fc;
 		}
+
 		.info-box--warning {
 			color: #fcd34d;
 		}
+
 		.info-box--success {
 			color: #6ee7b7;
 		}
+
 		.info-box--danger {
 			color: #fca5a5;
 		}

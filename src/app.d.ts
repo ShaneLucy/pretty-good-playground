@@ -16,6 +16,7 @@ declare global {
 		}
 
 		// Extend as needed downstream.
+		// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 		interface PageData {}
 
 		// interface PageState {}

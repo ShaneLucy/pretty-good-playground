@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	interface Props {
 		currentPath: string;
 	}
@@ -6,15 +8,15 @@
 	let { currentPath }: Props = $props();
 
 	const tabs = [
-		{ href: '/dashboard', label: 'Dashboard' },
-		{ href: '/profile', label: 'Profile' },
-		{ href: '/keys', label: 'Keys' },
-		{ href: '/about', label: 'About' }
-	] as const;
+		{ href: resolve('/dashboard'), label: 'Dashboard' },
+		{ href: resolve('/profile'), label: 'Profile' },
+		{ href: resolve('/keys'), label: 'Keys' },
+		{ href: resolve('/about'), label: 'About' }
+	];
 </script>
 
 <nav aria-label="Mobile navigation" class="bottom-tab-bar">
-	{#each tabs as tab}
+	{#each tabs as tab (tab.href)}
 		<a
 			href={tab.href}
 			class="bottom-tab-bar__tab"
@@ -34,11 +36,11 @@
 		z-index: 200;
 		background-color: var(--surface-card);
 		border-block-start: 1px solid var(--border-color);
-		box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 -2px 8px rgb(0 0 0 / 8%);
 		padding-block-end: env(safe-area-inset-bottom, 0);
 	}
 
-	@media (min-width: 768px) {
+	@media (width >= 768px) {
 		.bottom-tab-bar {
 			display: none;
 		}
@@ -73,7 +75,7 @@
 
 	@media (prefers-color-scheme: dark) {
 		.bottom-tab-bar__tab:hover {
-			background-color: rgba(129, 140, 248, 0.1);
+			background-color: rgb(129 140 248 / 10%);
 		}
 	}
 </style>

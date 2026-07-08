@@ -77,12 +77,15 @@
 		.flash-banner--success {
 			color: #6ee7b7;
 		}
+
 		.flash-banner--error {
 			color: #fca5a5;
 		}
+
 		.flash-banner--warning {
 			color: #fcd34d;
 		}
+
 		.flash-banner--info {
 			color: #7dd3fc;
 		}
