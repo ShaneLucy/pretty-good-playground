@@ -8,7 +8,7 @@ import {
   deriveUnlockedChapters,
   currentLesson,
   streakStatus
-} from "./progress-utils";
+} from "$lib/shared/progress-utils";
 
 function makeProgress(overrides: Partial<ProgressRecord> = {}): ProgressRecord {
   return {

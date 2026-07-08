@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import type { KvStore } from "./kv";
+import type { KvStore } from "$lib/server/kv";
 import type { Chapter } from "$lib/shared/types";
-import { completeChallenge, createEmptyProgress } from "./progress";
+import { completeChallenge, createEmptyProgress } from "$lib/server/progress";
 
-function createMockKv(store = new Map<string, string>()): KvStore {
+function createInMemoryKv(store = new Map<string, string>()): KvStore {
   return {
     get: async (key) => store.get(key) ?? null,
     put: async (key, value) => {
@@ -47,7 +47,7 @@ const BASE_PARAMS = {
 
 describe("completeChallenge", () => {
   it("awards XP on first completion", async () => {
-    const kv = createMockKv();
+    const kv = createInMemoryKv();
     const { xpAwarded } = await completeChallenge({
       kv,
       fingerprint: "FP1",
@@ -59,7 +59,7 @@ describe("completeChallenge", () => {
 
   it("is idempotent — second completion awards 0 XP", async () => {
     const store = new Map<string, string>();
-    const kv = createMockKv(store);
+    const kv = createInMemoryKv(store);
     await completeChallenge({ kv, fingerprint: "FP2", challengeId: "ch1-l1-c1", ...BASE_PARAMS });
     const second = await completeChallenge({
       kv,
@@ -72,7 +72,7 @@ describe("completeChallenge", () => {
   });
 
   it("earns first_signature achievement on first sign challenge", async () => {
-    const kv = createMockKv();
+    const kv = createInMemoryKv();
     const { newAchievements } = await completeChallenge({
       kv,
       fingerprint: "FP3",
@@ -85,7 +85,7 @@ describe("completeChallenge", () => {
 
   it("does not re-earn first_signature if already achieved", async () => {
     const store = new Map<string, string>();
-    const kv = createMockKv(store);
+    const kv = createInMemoryKv(store);
     // First completion earns first_signature
     await completeChallenge({
       kv,
@@ -107,7 +107,7 @@ describe("completeChallenge", () => {
 
   it("awards chapter completion bonus when final challenge in chapter is done", async () => {
     const store = new Map<string, string>();
-    const kv = createMockKv(store);
+    const kv = createInMemoryKv(store);
     // Complete first challenge
     await completeChallenge({
       kv,
@@ -129,7 +129,7 @@ describe("completeChallenge", () => {
   });
 
   it("earns first_lesson on the very first challenge completed", async () => {
-    const kv = createMockKv();
+    const kv = createInMemoryKv();
     const { newAchievements } = await completeChallenge({
       kv,
       fingerprint: "FP6",

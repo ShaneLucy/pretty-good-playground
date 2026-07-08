@@ -16,11 +16,13 @@ export default defineConfig({
     projects: [
       {
         extends: "./vite.config.ts",
+        resolve: {
+          conditions: ["browser"]
+        },
         test: {
           name: "client",
           environment: "jsdom",
-          include: ["src/**/*.svelte.{test,spec}.{js,ts}"],
-          exclude: ["src/lib/server/**"]
+          include: ["test/**/*.svelte.{test,spec}.{js,ts}"]
         }
       },
 
@@ -29,8 +31,8 @@ export default defineConfig({
         test: {
           name: "server",
           environment: "node",
-          include: ["src/**/*.{test,spec}.{js,ts}"],
-          exclude: ["src/**/*.svelte.{test,spec}.{js,ts}"]
+          include: ["test/**/*.{test,spec}.{js,ts}"],
+          exclude: ["test/**/*.svelte.{test,spec}.{js,ts}"]
         }
       }
     ]
