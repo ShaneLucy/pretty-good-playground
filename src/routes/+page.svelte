@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+  import { resolveRoute } from "$app/paths";
+</script>
+
+<h1>Welcome to PGP Playground</h1>
+<p>Learn PGP from the ground up through interactive challenges.</p>
+<p>
+  <a href={resolveRoute("/register")}>Get Started</a> or
+  <a href={resolveRoute("/login")}>Sign In</a>
+</p>

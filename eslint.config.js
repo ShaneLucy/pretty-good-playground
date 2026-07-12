@@ -33,6 +33,12 @@ export default defineConfig(
         extraFileExtensions: [".svelte"],
         parser: ts.parser
       }
+    },
+    rules: {
+      // sonarjs/deprecation crashes with an index-out-of-range error when analysing
+      // SvelteKit virtual module imports (e.g. $app/paths) inside Svelte files.
+      // Disable until upstream fixes the source-position calculation.
+      "sonarjs/deprecation": "off"
     }
   },
   {
