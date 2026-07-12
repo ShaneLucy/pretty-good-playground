@@ -5,6 +5,7 @@ import svelte from "eslint-plugin-svelte";
 import { defineConfig, includeIgnoreFile } from "eslint/config";
 import globals from "globals";
 import ts from "typescript-eslint";
+import sonarjs from "eslint-plugin-sonarjs";
 
 const gitignorePath = path.resolve(import.meta.dirname, ".gitignore");
 
@@ -15,6 +16,7 @@ export default defineConfig(
   svelte.configs.recommended,
   prettier,
   svelte.configs.prettier,
+  sonarjs.configs.recommended,
   {
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
     rules: {

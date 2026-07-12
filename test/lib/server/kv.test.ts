@@ -13,7 +13,7 @@ import {
 const TEST_FINGERPRINT = "ABCDEF1234567890";
 const TEST_NONCE = "deadbeef";
 const TEST_ENDPOINT = "login";
-const TEST_IDENTIFIER = "1.2.3.4";
+const TEST_IDENTIFIER = "test-client-id";
 const TEST_MINUTE = 12345;
 const TEST_VALUE = "stored-value";
 const MISSING_KEY = "does-not-exist";

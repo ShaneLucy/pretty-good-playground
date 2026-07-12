@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { KvStore } from "$lib/server/kv";
 import { rateLimit } from "$lib/server/rate-limit";
 
+const TEST_CLIENT = "test-client-id";
+
 function createInMemoryKv(store = new Map<string, string>()): KvStore {
   return {
     get: async (key) => store.get(key) ?? null,
@@ -21,7 +23,7 @@ describe("rateLimit", () => {
 
   it("allows requests below the limit", async () => {
     const kv = createInMemoryKv();
-    const result = await rateLimit(kv, "login", "1.2.3.4", 10);
+    const result = await rateLimit(kv, "login", TEST_CLIENT, 10);
     expect(result.allowed).toBe(true);
   });
 
@@ -35,9 +37,9 @@ describe("rateLimit", () => {
 
   it("rejects when current count reaches limit", async () => {
     const minute = Math.floor(Date.now() / 60_000);
-    const store = new Map([[`rl:v1:login:1.2.3.4:${minute}`, "10"]]);
+    const store = new Map([[`rl:v1:login:${TEST_CLIENT}:${minute}`, "10"]]);
     const kv = createInMemoryKv(store);
-    const result = await rateLimit(kv, "login", "1.2.3.4", 10);
+    const result = await rateLimit(kv, "login", TEST_CLIENT, 10);
     expect(result.allowed).toBe(false);
   });
 
