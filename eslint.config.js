@@ -36,8 +36,23 @@ export default defineConfig(
     }
   },
   {
-    // Override or add rule settings here, such as:
-    // 'svelte/button-has-type': 'error'
-    rules: {}
+    rules: {
+      // S121: control structures must always use curly braces
+      curly: ["error", "all"],
+      // S1541: cyclomatic complexity must not exceed 10
+      complexity: ["error", 10],
+      // S2138: undefined should not be explicitly assigned
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "VariableDeclarator[init.type='Identifier'][init.name='undefined']",
+          message: "Do not initialize to undefined; omit the initializer instead."
+        },
+        {
+          selector: "AssignmentExpression[right.type='Identifier'][right.name='undefined']",
+          message: "Do not assign undefined; use null for intentional absence."
+        }
+      ]
+    }
   }
 );

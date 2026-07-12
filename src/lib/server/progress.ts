@@ -19,7 +19,9 @@ export function createEmptyProgress(fingerprint: string): ProgressRecord {
 
 export async function getProgress(kv: KvStore, fingerprint: string): Promise<ProgressRecord> {
   const raw = await kv.get(progressKey(fingerprint));
-  if (!raw) return createEmptyProgress(fingerprint);
+  if (!raw) {
+    return createEmptyProgress(fingerprint);
+  }
   try {
     return JSON.parse(raw) as ProgressRecord;
   } catch {
@@ -35,6 +37,13 @@ const FINAL_CHAPTER_ID = "ch5";
 const PERSISTENCE_ATTEMPT_THRESHOLD = 5;
 const FIRST_COMPLETED_CHALLENGE_COUNT = 1;
 const DAILY_RETURN_BONUS_XP = 25;
+
+const CHALLENGE_TYPE_TO_ACHIEVEMENT: Readonly<Record<string, string>> = {
+  sign: "first_signature",
+  verify: "first_verification",
+  encrypt: "first_encryption",
+  decrypt: "first_decryption"
+};
 const FIRST_ATTEMPT_XP = 50;
 const SECOND_ATTEMPT_XP = 35;
 const DEFAULT_ATTEMPT_XP = 20;
@@ -45,8 +54,12 @@ function todayDate(isoString: string): string {
 }
 
 function baseXpForAttempt(attemptNumber: number): number {
-  if (attemptNumber === FIRST_ATTEMPT_NUMBER) return FIRST_ATTEMPT_XP;
-  if (attemptNumber === SECOND_ATTEMPT_NUMBER) return SECOND_ATTEMPT_XP;
+  if (attemptNumber === FIRST_ATTEMPT_NUMBER) {
+    return FIRST_ATTEMPT_XP;
+  }
+  if (attemptNumber === SECOND_ATTEMPT_NUMBER) {
+    return SECOND_ATTEMPT_XP;
+  }
   return DEFAULT_ATTEMPT_XP;
 }
 
@@ -56,8 +69,12 @@ function computeStreakDays(
   nowDay: string,
   lastDay: string
 ): number {
-  if (shouldReset) return 1;
-  if (nowDay !== lastDay) return current.streakDays + 1;
+  if (shouldReset) {
+    return 1;
+  }
+  if (nowDay !== lastDay) {
+    return current.streakDays + 1;
+  }
   return current.streakDays;
 }
 
@@ -72,17 +89,10 @@ function detectChallengeTypeAchievements(
   if (!has("first_lesson") && next.completedChallenges.length === FIRST_COMPLETED_CHALLENGE_COUNT) {
     earned.push("first_lesson");
   }
-  if (!has("first_signature") && challengeType === "sign") {
-    earned.push("first_signature");
-  }
-  if (!has("first_verification") && challengeType === "verify") {
-    earned.push("first_verification");
-  }
-  if (!has("first_encryption") && challengeType === "encrypt") {
-    earned.push("first_encryption");
-  }
-  if (!has("first_decryption") && challengeType === "decrypt") {
-    earned.push("first_decryption");
+
+  const typeAchievement = CHALLENGE_TYPE_TO_ACHIEVEMENT[challengeType];
+  if (typeAchievement && !has(typeAchievement)) {
+    earned.push(typeAchievement);
   }
 
   return earned;
@@ -98,7 +108,9 @@ function detectChapterAchievements(
   const has = (id: string): boolean => prev.achievements.includes(id);
 
   const chapterAchievement = `${chapterId}_complete`;
-  if (!has(chapterAchievement)) earned.push(chapterAchievement);
+  if (!has(chapterAchievement)) {
+    earned.push(chapterAchievement);
+  }
   if (allChaptersComplete && !has("all_chapters_complete")) {
     earned.push("all_chapters_complete");
   }
@@ -145,6 +157,13 @@ function detectAchievements(params: {
   }
 
   return earned;
+}
+
+function buildUpdatedLessons(current: ProgressRecord, lessonId: string): string[] {
+  if (current.completedLessons?.includes(lessonId)) {
+    return current.completedLessons as string[];
+  }
+  return [...(current.completedLessons ?? []), lessonId];
 }
 
 const CHAPTER_COMPLETION_XP = 200;
@@ -213,12 +232,12 @@ export async function completeChallenge(params: {
   // Daily return bonus
   const nowDay = todayDate(nowIso);
   const lastDay = todayDate(current.lastActivityAt);
-  if (nowDay !== lastDay) xp += DAILY_RETURN_BONUS_XP;
+  if (nowDay !== lastDay) {
+    xp += DAILY_RETURN_BONUS_XP;
+  }
 
   const updatedChallenges = [...current.completedChallenges, challengeId];
-  const updatedLessons = current.completedLessons?.includes(lessonId)
-    ? (current.completedLessons as string[])
-    : [...(current.completedLessons ?? []), lessonId];
+  const updatedLessons = buildUpdatedLessons(current, lessonId);
 
   // Find the chapter in the curriculum
   const chapter = chapters.find((c) => c.id === chapterId);

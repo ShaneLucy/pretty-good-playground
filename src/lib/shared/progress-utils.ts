@@ -29,8 +29,12 @@ export function levelFromXp(xp: number): number {
 }
 
 export function levelTitle(level: number): string {
-  if (level <= 0) return LEVEL_TITLES[0];
-  if (level <= LEVEL_TITLES.length) return LEVEL_TITLES[level - 1];
+  if (level <= 0) {
+    return LEVEL_TITLES[0];
+  }
+  if (level <= LEVEL_TITLES.length) {
+    return LEVEL_TITLES[level - 1];
+  }
   return "Distinguished Cryptographer";
 }
 
@@ -63,7 +67,9 @@ export function deriveUnlockedChapters(
 
 export function chapterPercent(progress: ProgressRecord, chapter: Chapter): number {
   const total = chapter.lessons.reduce((sum, l) => sum + l.challenges.length, 0);
-  if (total === 0) return 0;
+  if (total === 0) {
+    return 0;
+  }
   const completed = chapter.lessons.reduce(
     (sum, l) =>
       sum + l.challenges.filter((c) => progress.completedChallenges.includes(c.id)).length,
@@ -74,7 +80,9 @@ export function chapterPercent(progress: ProgressRecord, chapter: Chapter): numb
 
 export function currentLesson(progress: ProgressRecord, chapter: Chapter): Lesson | null {
   for (const lesson of chapter.lessons) {
-    if (!isLessonComplete(progress, lesson)) return lesson;
+    if (!isLessonComplete(progress, lesson)) {
+      return lesson;
+    }
   }
   return null;
 }
@@ -84,13 +92,19 @@ export function streakStatus(
   nowDate: string
 ): { active: boolean; shouldReset: boolean } {
   const lastDate = progress.streakLastDate;
-  if (!lastDate) return { active: false, shouldReset: false };
+  if (!lastDate) {
+    return { active: false, shouldReset: false };
+  }
 
   const now = new Date(nowDate);
   const last = new Date(lastDate);
   const diffDays = Math.round((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return { active: true, shouldReset: false };
-  if (diffDays === 1) return { active: true, shouldReset: false };
+  if (diffDays === 0) {
+    return { active: true, shouldReset: false };
+  }
+  if (diffDays === 1) {
+    return { active: true, shouldReset: false };
+  }
   return { active: false, shouldReset: true };
 }

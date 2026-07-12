@@ -16,7 +16,9 @@ export async function rateLimit(
   const currCount = currStr !== null ? parseInt(currStr, 10) || 0 : 0;
   const elapsed = (Date.now() % 60_000) / 60_000;
   const estimate = prevCount * (1 - elapsed) + currCount;
-  if (estimate >= limit) return { allowed: false };
+  if (estimate >= limit) {
+    return { allowed: false };
+  }
   await kv.put(rateLimitKey(endpoint, identifier, minute), String(currCount + 1), {
     expirationTtl: 120
   });

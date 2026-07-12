@@ -24,7 +24,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  if (component) unmount(component);
+  if (component) {
+    unmount(component);
+  }
 });
 
 describe("CopyBlock — rendering", () => {

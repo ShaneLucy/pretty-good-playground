@@ -38,7 +38,9 @@ export async function verifySignature(params: {
       verificationKeys: params.publicKey
     });
     const sig = result.signatures[0];
-    if (!sig) return { valid: false, text: result.data };
+    if (!sig) {
+      return { valid: false, text: result.data };
+    }
     try {
       await sig.verified;
       return { valid: true, text: result.data };

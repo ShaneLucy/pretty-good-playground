@@ -15,7 +15,9 @@ export async function readAndClearFlash(
   fingerprint: string
 ): Promise<FlashMessage | null> {
   const raw = await kv.get(flashKey(fingerprint));
-  if (!raw) return null;
+  if (!raw) {
+    return null;
+  }
   await kv.delete(flashKey(fingerprint));
   try {
     const parsed = JSON.parse(raw) as unknown;

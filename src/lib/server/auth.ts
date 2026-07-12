@@ -17,7 +17,9 @@ export async function verifyJwt(token: string, secret: string): Promise<{ sub: s
   try {
     const secretKey = new TextEncoder().encode(secret);
     const { payload } = await jwtVerify(token, secretKey);
-    if (typeof payload.sub !== "string") return null;
+    if (typeof payload.sub !== "string") {
+      return null;
+    }
     return { sub: payload.sub };
   } catch {
     return null;
