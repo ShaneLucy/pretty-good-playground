@@ -10,7 +10,6 @@ const TEST_DISPLAY_NAME = "Test User";
 const TEST_PUBLIC_KEY =
   "-----BEGIN PGP PUBLIC KEY BLOCK-----\ntest\n-----END PGP PUBLIC KEY BLOCK-----";
 
-const SECURITY_HEADER_CSP = "Content-Security-Policy";
 const SECURITY_HEADER_FRAME = "X-Frame-Options";
 const SECURITY_HEADER_CONTENT_TYPE = "X-Content-Type-Options";
 const SECURITY_HEADER_REFERRER = "Referrer-Policy";
@@ -78,14 +77,6 @@ function makeResolve() {
 }
 
 describe("handle — security headers", () => {
-  it("sets Content-Security-Policy on every response", async () => {
-    const event = makeEvent({ platform: null });
-
-    const response = await handle({ event, resolve: makeResolve() });
-
-    expect(response.headers.get(SECURITY_HEADER_CSP)).toContain("default-src 'self'");
-  });
-
   it("sets X-Frame-Options: DENY", async () => {
     const event = makeEvent({ platform: null });
 

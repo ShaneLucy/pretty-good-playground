@@ -4,21 +4,7 @@ import { getMainKv, userKey } from "$lib/server/kv";
 import { readAndClearFlash } from "$lib/server/flash";
 import type { UserRecord } from "$lib/shared/types";
 
-const CSP_DIRECTIVES = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
-  "connect-src 'self'",
-  "font-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'"
-].join("; ");
-
 const SECURITY_HEADERS = {
-  "Content-Security-Policy": CSP_DIRECTIVES,
   "X-Frame-Options": "DENY",
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
