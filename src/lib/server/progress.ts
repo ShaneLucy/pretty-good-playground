@@ -13,7 +13,8 @@ export function createEmptyProgress(fingerprint: string): ProgressRecord {
     achievements: [],
     lastActivityAt: new Date().toISOString(),
     streakDays: 0,
-    streakLastDate: undefined
+    streakLastDate: undefined,
+    totalHintsUsed: 0
   };
 }
 
@@ -37,6 +38,10 @@ const FINAL_CHAPTER_ID = "ch5";
 const PERSISTENCE_ATTEMPT_THRESHOLD = 5;
 const FIRST_COMPLETED_CHALLENGE_COUNT = 1;
 const DAILY_RETURN_BONUS_XP = 25;
+const NIGHT_OWL_MAX_HOUR = 3;
+const NIGHT_OWL_ACHIEVEMENT = "night_owl";
+const PARANOID_COMPLIMENT_ACHIEVEMENT = "paranoid_compliment";
+const ZERO_HINTS = 0;
 
 const CHALLENGE_TYPE_TO_ACHIEVEMENT: Readonly<Record<string, string>> = {
   sign: "first_signature",
@@ -124,6 +129,33 @@ function detectChapterAchievements(
   return earned;
 }
 
+function detectNightOwlAchievement(prev: ProgressRecord, nowUtcHour: number): string[] {
+  if (nowUtcHour > NIGHT_OWL_MAX_HOUR) {
+    return [];
+  }
+  if (prev.achievements.includes(NIGHT_OWL_ACHIEVEMENT)) {
+    return [];
+  }
+  return [NIGHT_OWL_ACHIEVEMENT];
+}
+
+function detectParanoidComplimentAchievement(
+  prev: ProgressRecord,
+  allChaptersComplete: boolean,
+  updatedTotalHintsUsed: number
+): string[] {
+  if (!allChaptersComplete) {
+    return [];
+  }
+  if (updatedTotalHintsUsed !== ZERO_HINTS) {
+    return [];
+  }
+  if (prev.achievements.includes(PARANOID_COMPLIMENT_ACHIEVEMENT)) {
+    return [];
+  }
+  return [PARANOID_COMPLIMENT_ACHIEVEMENT];
+}
+
 function detectAchievements(params: {
   prev: ProgressRecord;
   next: ProgressRecord;
@@ -133,6 +165,8 @@ function detectAchievements(params: {
   allChaptersComplete: boolean;
   perfectChapter: boolean;
   attemptNumber: number;
+  nowUtcHour: number;
+  updatedTotalHintsUsed: number;
 }): string[] {
   const {
     prev,
@@ -142,7 +176,9 @@ function detectAchievements(params: {
     chapterJustCompleted,
     allChaptersComplete,
     perfectChapter,
-    attemptNumber
+    attemptNumber,
+    nowUtcHour,
+    updatedTotalHintsUsed
   } = params;
   const has = (id: string): boolean => prev.achievements.includes(id);
 
@@ -155,6 +191,11 @@ function detectAchievements(params: {
   if (attemptNumber >= PERSISTENCE_ATTEMPT_THRESHOLD && !has("persistence")) {
     earned.push("persistence");
   }
+
+  earned.push(...detectNightOwlAchievement(prev, nowUtcHour));
+  earned.push(
+    ...detectParanoidComplimentAchievement(prev, allChaptersComplete, updatedTotalHintsUsed)
+  );
 
   return earned;
 }
@@ -215,6 +256,7 @@ export async function completeChallenge(params: {
     lessonId,
     chapterId,
     challengeType,
+    hintsUsed,
     attemptNumber,
     chapters,
     nowIso
@@ -248,7 +290,7 @@ export async function completeChallenge(params: {
     );
 
   if (chapterJustCompleted && chapter) {
-    xp += calculateChapterXpBonus(chapter, challengeId, current, params.hintsUsed, attemptNumber);
+    xp += calculateChapterXpBonus(chapter, challengeId, current, hintsUsed, attemptNumber);
   }
 
   const allChaptersComplete =
@@ -258,6 +300,9 @@ export async function completeChallenge(params: {
         c.id === chapterId ||
         c.lessons.every((l) => l.challenges.every((ch) => updatedChallenges.includes(ch.id)))
     );
+
+  const updatedTotalHintsUsed = (current.totalHintsUsed ?? 0) + hintsUsed;
+  const nowUtcHour = new Date(nowIso).getUTCHours();
 
   const newXp = current.xp + xp;
   const newLevel = levelFromXp(newXp);
@@ -274,7 +319,8 @@ export async function completeChallenge(params: {
     level: newLevel,
     lastActivityAt: nowIso,
     streakDays: newStreakDays,
-    streakLastDate: nowDay
+    streakLastDate: nowDay,
+    totalHintsUsed: updatedTotalHintsUsed
   };
 
   const newAchievements = detectAchievements({
@@ -285,7 +331,9 @@ export async function completeChallenge(params: {
     chapterJustCompleted,
     allChaptersComplete,
     perfectChapter: chapterJustCompleted && attemptNumber === FIRST_ATTEMPT_NUMBER,
-    attemptNumber
+    attemptNumber,
+    nowUtcHour,
+    updatedTotalHintsUsed
   });
 
   const withAchievements: ProgressRecord = {

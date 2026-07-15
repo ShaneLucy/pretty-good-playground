@@ -116,12 +116,14 @@ export interface ProgressRecord {
   readonly streakLastDate?: string;
   /** Cached lesson IDs for completed lessons. */
   readonly completedLessons?: readonly string[];
+  /** Total hints opened across all challenges, for the paranoid_compliment achievement. */
+  readonly totalHintsUsed?: number;
 }
 
 /**
  * The severity/intent of a flash message shown to the user.
  */
-export type FlashMessageType = "success" | "error" | "warning" | "info";
+export type FlashMessageType = "success" | "error" | "warning" | "info" | "achievement";
 
 /**
  * A transient message surfaced to the user after an action.

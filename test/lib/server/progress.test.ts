@@ -380,3 +380,152 @@ describe("completeChallenge — all_chapters_complete achievement", () => {
     expect(newAchievements).toContain("all_chapters_complete");
   });
 });
+
+describe("completeChallenge — night_owl achievement", () => {
+  const NIGHT_OWL_HOUR_ISO = "2025-06-15T01:30:00.000Z";
+  const DAYTIME_HOUR_ISO = "2025-06-15T12:00:00.000Z";
+
+  it("awards night_owl when submission UTC hour is 0–3", async () => {
+    const kv = createInMemoryKv();
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_NIGHT1",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      nowIso: NIGHT_OWL_HOUR_ISO
+    });
+
+    expect(newAchievements).toContain("night_owl");
+  });
+
+  it("does not award night_owl when UTC hour is 12", async () => {
+    const kv = createInMemoryKv();
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_NIGHT2",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      nowIso: DAYTIME_HOUR_ISO
+    });
+
+    expect(newAchievements).not.toContain("night_owl");
+  });
+
+  it("does not award night_owl a second time if already earned", async () => {
+    const store = new Map<string, string>();
+    const kv = createInMemoryKv(store);
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_NIGHT3"),
+      achievements: ["night_owl"],
+      lastActivityAt: NIGHT_OWL_HOUR_ISO
+    });
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_NIGHT3",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      nowIso: NIGHT_OWL_HOUR_ISO
+    });
+
+    expect(newAchievements).not.toContain("night_owl");
+  });
+});
+
+describe("completeChallenge — paranoid_compliment achievement", () => {
+  const singleChapterMock: readonly Chapter[] = [
+    {
+      id: "ch1",
+      title: "C1",
+      description: "",
+      lessons: [
+        {
+          id: "ch1-l1",
+          title: "",
+          description: "",
+          xpReward: 10,
+          challenges: [
+            { id: "ch1-l1-c1", setup: { type: "explainer", content: "x" } },
+            { id: "ch1-l1-c2", setup: { type: "explainer", content: "y" } }
+          ]
+        }
+      ]
+    }
+  ];
+
+  it("awards paranoid_compliment when all chapters complete with zero total hints", async () => {
+    const kv = createInMemoryKv();
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_PARANOID1"),
+      completedChallenges: ["ch1-l1-c1"],
+      totalHintsUsed: 0
+    });
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_PARANOID1",
+      challengeId: "ch1-l1-c2",
+      lessonId: "ch1-l1",
+      chapterId: "ch1",
+      challengeType: "explainer",
+      hintsUsed: 0,
+      attemptNumber: 1,
+      chapters: singleChapterMock,
+      nowIso: BASE_PARAMS.nowIso
+    });
+
+    expect(newAchievements).toContain("paranoid_compliment");
+  });
+
+  it("does not award paranoid_compliment when all chapters complete but hints were used", async () => {
+    const kv = createInMemoryKv();
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_PARANOID2"),
+      completedChallenges: ["ch1-l1-c1"],
+      totalHintsUsed: 1
+    });
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_PARANOID2",
+      challengeId: "ch1-l1-c2",
+      lessonId: "ch1-l1",
+      chapterId: "ch1",
+      challengeType: "explainer",
+      hintsUsed: 0,
+      attemptNumber: 1,
+      chapters: singleChapterMock,
+      nowIso: BASE_PARAMS.nowIso
+    });
+
+    expect(newAchievements).not.toContain("paranoid_compliment");
+  });
+});
+
+describe("completeChallenge — totalHintsUsed accumulation", () => {
+  it("accumulates totalHintsUsed correctly across multiple calls", async () => {
+    const store = new Map<string, string>();
+    const kv = createInMemoryKv(store);
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_HINTS"),
+      totalHintsUsed: 2,
+      lastActivityAt: BASE_PARAMS.nowIso
+    });
+
+    const { progress } = await completeChallenge({
+      kv,
+      fingerprint: "FP_HINTS",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      hintsUsed: 3
+    });
+
+    expect(progress.totalHintsUsed).toBe(5);
+  });
+});

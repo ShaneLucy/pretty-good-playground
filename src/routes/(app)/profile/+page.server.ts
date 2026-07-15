@@ -1,7 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
 import { getMainKv, userKey } from "$lib/server/kv";
-import { getProgress } from "$lib/server/progress";
+import { getProgress, saveProgress } from "$lib/server/progress";
+import { writeFlash } from "$lib/server/flash";
 import { chapterPercent } from "$lib/shared/progress-utils";
 import { chapters } from "$lib/shared/content/index";
 import type { UserRecord } from "$lib/shared/types";
@@ -9,6 +10,8 @@ import type { UserRecord } from "$lib/shared/types";
 const DISPLAY_NAME_MIN_LENGTH = 2;
 const DISPLAY_NAME_MAX_LENGTH = 50;
 const DISPLAY_NAME_PATTERN = /^[\w\s]+$/;
+const OPEN_BOOK_ACHIEVEMENT = "open_book";
+const OPEN_BOOK_FLASH_MESSAGE = "Achievement unlocked: open book";
 
 interface ChapterProgress {
   readonly id: string;
@@ -98,6 +101,21 @@ export const actions: Actions = {
     const record = JSON.parse(raw) as UserRecord;
     const updated: UserRecord = { ...record, profilePublic: wantsPublic };
     await kv.put(userKey(fingerprint), JSON.stringify(updated));
+
+    if (wantsPublic && !record.profilePublic) {
+      const progress = await getProgress(kv, fingerprint);
+      if (!progress.achievements.includes(OPEN_BOOK_ACHIEVEMENT)) {
+        const updatedProgress = {
+          ...progress,
+          achievements: [...progress.achievements, OPEN_BOOK_ACHIEVEMENT]
+        };
+        await saveProgress(kv, updatedProgress);
+        await writeFlash(kv, fingerprint, {
+          type: "achievement",
+          message: OPEN_BOOK_FLASH_MESSAGE
+        });
+      }
+    }
 
     redirect(303, "/profile");
   }

@@ -35,6 +35,21 @@
 
   const nextLessonHref = $derived<ResolvedPathname | null>(null);
 
+  let hintsUsed = $state(0);
+
+  $effect(() => {
+    // Reset hint count when the active challenge changes
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    activeChallenge?.id;
+    hintsUsed = 0;
+  });
+
+  function handleHintToggle(event: ToggleEvent): void {
+    if (event.newState === "open") {
+      hintsUsed += 1;
+    }
+  }
+
   const breadcrumbs = $derived([
     {
       label: "Dashboard",
@@ -68,7 +83,7 @@
         <p class="instruction-panel__description">{lessonDescription}</p>
 
         {#if activeChallenge?.hint}
-          <details class="instruction-panel__hint">
+          <details class="instruction-panel__hint" ontoggle={handleHintToggle}>
             <summary class="instruction-panel__hint-summary">Need a hint?</summary>
             <div class="instruction-panel__hint-body">
               <p>{activeChallenge.hint}</p>
@@ -100,7 +115,7 @@
               use:enhance
             >
               <input type="hidden" name="challengeId" value={activeChallenge.id} />
-              <input type="hidden" name="hintsUsed" value="0" />
+              <input type="hidden" name="hintsUsed" value={hintsUsed} />
               <input type="hidden" name="attemptNumber" value="1" />
             </form>
 
@@ -108,7 +123,7 @@
               {@const setup = activeChallenge.setup}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <SignWorkspace plaintext={setup.plaintext} />
               </form>
@@ -116,7 +131,7 @@
               {@const setup = activeChallenge.setup}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <VerifyWorkspace signedMessage={setup.signedMessage} />
               </form>
@@ -124,7 +139,7 @@
               {@const setup = activeChallenge.setup}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <EncryptWorkspace
                   recipientPublicKey={setup.recipientPublicKey}
@@ -135,7 +150,7 @@
               {@const setup = activeChallenge.setup}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <DecryptWorkspace ciphertext={setup.ciphertext} />
               </form>
@@ -143,14 +158,14 @@
               {@const setup = activeChallenge.setup}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <QuizWorkspace question={setup.question} options={setup.options} />
               </form>
             {:else if activeChallenge.setup.type === "explainer"}
               <form method="POST" action="?/submit" use:enhance>
                 <input type="hidden" name="challengeId" value={activeChallenge.id} />
-                <input type="hidden" name="hintsUsed" value="0" />
+                <input type="hidden" name="hintsUsed" value={hintsUsed} />
                 <input type="hidden" name="attemptNumber" value="1" />
                 <ExplainerWorkspace />
               </form>

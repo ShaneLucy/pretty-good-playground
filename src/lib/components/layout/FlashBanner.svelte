@@ -27,6 +27,10 @@
     aria-live={flash.type === "error" ? "assertive" : "polite"}
   >
     <div class="flash-banner__inner">
+      {#if flash.type === "achievement"}
+        <!-- Badge icon is decorative; screen readers read only the message text -->
+        <span class="flash-banner__badge" aria-hidden="true">★</span>
+      {/if}
       <p class="flash-banner__message">{flash.message}</p>
     </div>
   </div>
@@ -42,6 +46,15 @@
     margin-inline: auto;
     padding-block: var(--space-2);
     padding-inline: var(--space-6);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .flash-banner__badge {
+    flex-shrink: 0;
+    font-size: var(--text-base);
+    line-height: 1;
   }
 
   .flash-banner__message {
@@ -73,6 +86,13 @@
     border-block-end: 1px solid var(--color-info);
   }
 
+  /* Achievement: gold-100 background, gold-600 border, dark amber text */
+  .flash-banner--achievement {
+    background-color: var(--color-gold-100);
+    color: #92400e;
+    border-block-end: 1px solid var(--color-gold-600);
+  }
+
   @media (prefers-color-scheme: dark) {
     .flash-banner--success {
       color: #6ee7b7;
@@ -88,6 +108,11 @@
 
     .flash-banner--info {
       color: #7dd3fc;
+    }
+
+    /* Dark mode: gold-500 gives sufficient contrast on dark surfaces */
+    .flash-banner--achievement {
+      color: var(--color-gold-500);
     }
   }
 </style>

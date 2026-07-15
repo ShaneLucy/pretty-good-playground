@@ -1,5 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import { browser } from "$app/environment";
+
+  type TabId = "instruction" | "workspace";
 
   interface Props {
     left: Snippet;
@@ -7,12 +10,33 @@
   }
 
   let { left, right }: Props = $props();
+
+  let activeTab = $state<TabId>("instruction");
+
+  function handleTabClick(event: MouseEvent, tab: TabId): void {
+    event.preventDefault();
+    activeTab = tab;
+  }
 </script>
 
 <div class="two-panel">
-  <nav class="two-panel__tabs" aria-label="Lesson panels">
-    <a href="#instruction" class="two-panel__tab">Learn</a>
-    <a href="#workspace" class="two-panel__tab">Do</a>
+  <nav class="two-panel__tabs" aria-label="Lesson panels" role={browser ? "tablist" : undefined}>
+    <a
+      href="#instruction"
+      class="two-panel__tab"
+      role={browser ? "tab" : undefined}
+      aria-selected={browser ? activeTab === "instruction" : undefined}
+      aria-controls={browser ? "instruction" : undefined}
+      onclick={(e) => handleTabClick(e, "instruction")}>Learn</a
+    >
+    <a
+      href="#workspace"
+      class="two-panel__tab"
+      role={browser ? "tab" : undefined}
+      aria-selected={browser ? activeTab === "workspace" : undefined}
+      aria-controls={browser ? "workspace" : undefined}
+      onclick={(e) => handleTabClick(e, "workspace")}>Do</a
+    >
   </nav>
 
   <div class="two-panel__layout">
@@ -20,6 +44,8 @@
       id="instruction"
       class="two-panel__pane two-panel__pane--left"
       aria-label="Instruction panel"
+      role={browser ? "tabpanel" : undefined}
+      hidden={browser ? activeTab !== "instruction" : undefined}
     >
       {@render left()}
     </section>
@@ -28,6 +54,8 @@
       id="workspace"
       class="two-panel__pane two-panel__pane--right"
       aria-label="Workspace panel"
+      role={browser ? "tabpanel" : undefined}
+      hidden={browser ? activeTab !== "workspace" : undefined}
     >
       {@render right()}
     </section>

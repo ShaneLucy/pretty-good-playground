@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { load, actions } from "../../../../src/routes/(app)/profile/+page.server";
 import type { KvStore } from "$lib/server/kv";
-import { userKey } from "$lib/server/kv";
-import type { UserRecord } from "$lib/shared/types";
+import { userKey, progressKey, flashKey } from "$lib/server/kv";
+import type { UserRecord, FlashMessage } from "$lib/shared/types";
 
 const TEST_FINGERPRINT = "TESTFP";
 const TEST_DISPLAY_NAME = "Test User";
@@ -264,5 +264,39 @@ describe("toggleVisibility action", () => {
     const raw = await kv.get(userKey(TEST_FINGERPRINT));
     const saved = JSON.parse(raw!) as UserRecord;
     expect(saved.profilePublic).toBe(false);
+  });
+
+  it("awards open_book achievement and writes achievement flash when setting public for first time", async () => {
+    const store = new Map<string, string>();
+    store.set(
+      userKey(TEST_FINGERPRINT),
+      JSON.stringify(buildUserRecord(TEST_FINGERPRINT, { profilePublic: false }))
+    );
+    const kv = createInMemoryKv(store);
+
+    await captureRedirect(() => actions.toggleVisibility(makeToggleEvent(true, kv)));
+
+    const progressRaw = await kv.get(progressKey(TEST_FINGERPRINT));
+    const savedProgress = JSON.parse(progressRaw!) as { achievements: string[] };
+    expect(savedProgress.achievements).toContain("open_book");
+
+    const flashRaw = await kv.get(flashKey(TEST_FINGERPRINT));
+    const flash = JSON.parse(flashRaw!) as FlashMessage;
+    expect(flash.type).toBe("achievement");
+    expect(flash.message).toBe("Achievement unlocked: open book");
+  });
+
+  it("does not re-award open_book when profile is already public", async () => {
+    const store = new Map<string, string>();
+    store.set(
+      userKey(TEST_FINGERPRINT),
+      JSON.stringify(buildUserRecord(TEST_FINGERPRINT, { profilePublic: true }))
+    );
+    const kv = createInMemoryKv(store);
+
+    await captureRedirect(() => actions.toggleVisibility(makeToggleEvent(true, kv)));
+
+    const flashRaw = await kv.get(flashKey(TEST_FINGERPRINT));
+    expect(flashRaw).toBeNull();
   });
 });
