@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { KvStore } from "$lib/server/kv";
+import { rateLimitKey } from "$lib/server/kv";
 import { rateLimit } from "$lib/server/rate-limit";
 
 const TEST_CLIENT = "test-client-id";
@@ -63,5 +64,44 @@ describe("rateLimit", () => {
     // prevCount=100 * (1-0.9999...) ≈ 0.001 + currCount=0 < limit 5 → allowed
     const result = await rateLimit(kv, "ep", "id", 5);
     expect(result.allowed).toBe(true);
+  });
+});
+
+describe("rateLimit — non-numeric KV values", () => {
+  const NON_NUMERIC_VALUE = "abc";
+  const HIGH_LIMIT = 10;
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("treats non-numeric previous-minute value as 0 and allows the request", async () => {
+    const minute = Math.floor(Date.now() / 60_000);
+    const store = new Map([[rateLimitKey("login", TEST_CLIENT, minute - 1), NON_NUMERIC_VALUE]]);
+    const kv = createInMemoryKv(store);
+
+    const result = await rateLimit(kv, "login", TEST_CLIENT, HIGH_LIMIT);
+
+    expect(result.allowed).toBe(true);
+  });
+
+  it("treats non-numeric current-minute value as 0 and allows the request", async () => {
+    const minute = Math.floor(Date.now() / 60_000);
+    const store = new Map([[rateLimitKey("login", TEST_CLIENT, minute), NON_NUMERIC_VALUE]]);
+    const kv = createInMemoryKv(store);
+
+    const result = await rateLimit(kv, "login", TEST_CLIENT, HIGH_LIMIT);
+
+    expect(result.allowed).toBe(true);
+  });
+
+  it("increments counter to 1 when current-minute value is non-numeric", async () => {
+    const minute = Math.floor(Date.now() / 60_000);
+    const store = new Map([[rateLimitKey("login", TEST_CLIENT, minute), NON_NUMERIC_VALUE]]);
+    const kv = createInMemoryKv(store);
+
+    await rateLimit(kv, "login", TEST_CLIENT, HIGH_LIMIT);
+
+    expect(store.get(rateLimitKey("login", TEST_CLIENT, minute))).toBe("1");
   });
 });

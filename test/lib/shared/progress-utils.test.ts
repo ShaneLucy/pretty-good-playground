@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import type { ProgressRecord } from "$lib/shared/types";
+import type { ProgressRecord, Chapter } from "$lib/shared/types";
+import { CHALLENGE_TYPES } from "$lib/shared/types";
 import { chapters } from "$lib/shared/content/index";
 import {
   levelFromXp,
@@ -39,11 +40,17 @@ describe("levelFromXp", () => {
   ])("xp=%i → level %i", (xp, expected) => {
     expect(levelFromXp(xp)).toBe(expected);
   });
+
+  it("returns level 1 for negative XP", () => {
+    expect(levelFromXp(-1)).toBe(1);
+  });
 });
 
 describe("levelTitle", () => {
+  const CURIOUS_BEGINNER = "Curious Beginner";
+
   it('returns "Curious Beginner" for level 1', () => {
-    expect(levelTitle(1)).toBe("Curious Beginner");
+    expect(levelTitle(1)).toBe(CURIOUS_BEGINNER);
   });
   it('returns "Cryptographer" for level 10', () => {
     expect(levelTitle(10)).toBe("Cryptographer");
@@ -52,10 +59,17 @@ describe("levelTitle", () => {
     expect(levelTitle(11)).toBe("Distinguished Cryptographer");
     expect(levelTitle(99)).toBe("Distinguished Cryptographer");
   });
+  it('returns "Curious Beginner" for level 0', () => {
+    expect(levelTitle(0)).toBe(CURIOUS_BEGINNER);
+  });
+  it('returns "Curious Beginner" for negative level', () => {
+    expect(levelTitle(-1)).toBe(CURIOUS_BEGINNER);
+  });
 });
 
 describe("chapterPercent", () => {
   const ch1 = chapters[0];
+  const EMPTY_CHAPTER: Chapter = { id: "ch0", title: "", description: "", lessons: [] };
 
   it("returns 0 with no completions", () => {
     expect(chapterPercent(makeProgress(), ch1)).toBe(0);
@@ -73,6 +87,10 @@ describe("chapterPercent", () => {
     const pct = chapterPercent(p, ch1);
     expect(pct).toBeGreaterThan(0);
     expect(pct).toBeLessThan(100);
+  });
+
+  it("returns 0 when chapter has no lessons", () => {
+    expect(chapterPercent(makeProgress(), EMPTY_CHAPTER)).toBe(0);
   });
 });
 
@@ -136,5 +154,14 @@ describe("streakStatus", () => {
   it("returns inactive with no streakLastDate", () => {
     const p = makeProgress({ streakLastDate: undefined });
     expect(streakStatus(p, "2025-06-15")).toEqual({ active: false, shouldReset: false });
+  });
+});
+
+describe("CHALLENGE_TYPES", () => {
+  const EXPECTED_CHALLENGE_TYPE_COUNT = 6;
+
+  it("contains the six expected types", () => {
+    expect(CHALLENGE_TYPES).toContain("sign");
+    expect(CHALLENGE_TYPES).toHaveLength(EXPECTED_CHALLENGE_TYPE_COUNT);
   });
 });

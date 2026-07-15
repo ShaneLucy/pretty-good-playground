@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import type { KvStore } from "$lib/server/kv";
+import { progressKey } from "$lib/server/kv";
 import type { Chapter } from "$lib/shared/types";
-import { completeChallenge, createEmptyProgress } from "$lib/server/progress";
+import {
+  completeChallenge,
+  createEmptyProgress,
+  getProgress,
+  saveProgress
+} from "$lib/server/progress";
 
 function createInMemoryKv(store = new Map<string, string>()): KvStore {
   return {
@@ -145,5 +151,232 @@ describe("completeChallenge", () => {
     expect(p.xp).toBe(0);
     expect(p.level).toBe(1);
     expect(p.completedChallenges).toHaveLength(0);
+  });
+});
+
+describe("getProgress — corrupt JSON", () => {
+  const CORRUPT_FINGERPRINT = "FP_CORRUPT";
+  const CORRUPT_JSON = "{ bad json";
+
+  it("returns empty progress when JSON in KV is corrupt", async () => {
+    const store = new Map([[progressKey(CORRUPT_FINGERPRINT), CORRUPT_JSON]]);
+    const kv = createInMemoryKv(store);
+
+    const result = await getProgress(kv, CORRUPT_FINGERPRINT);
+
+    expect(result.fingerprint).toBe(CORRUPT_FINGERPRINT);
+    expect(result.xp).toBe(0);
+    expect(result.level).toBe(1);
+    expect(result.completedChallenges).toHaveLength(0);
+  });
+});
+
+describe("completeChallenge — attempt XP tiers", () => {
+  const SECOND_ATTEMPT_XP = 35;
+  const DEFAULT_ATTEMPT_XP = 20;
+  // Pre-seed progress with lastActivityAt matching BASE_PARAMS.nowIso so the
+  // daily-return bonus does not apply and base XP is isolated.
+  const SAME_DAY_ACTIVITY = BASE_PARAMS.nowIso;
+
+  it("awards second-attempt XP for attemptNumber 2", async () => {
+    const kv = createInMemoryKv();
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_ATT2"),
+      lastActivityAt: SAME_DAY_ACTIVITY
+    });
+
+    const { xpAwarded } = await completeChallenge({
+      kv,
+      fingerprint: "FP_ATT2",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      attemptNumber: 2
+    });
+
+    expect(xpAwarded).toBe(SECOND_ATTEMPT_XP);
+  });
+
+  it("awards default XP for attemptNumber 3 or more", async () => {
+    const kv = createInMemoryKv();
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_ATT3"),
+      lastActivityAt: SAME_DAY_ACTIVITY
+    });
+
+    const { xpAwarded } = await completeChallenge({
+      kv,
+      fingerprint: "FP_ATT3",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      attemptNumber: 3
+    });
+
+    expect(xpAwarded).toBe(DEFAULT_ATTEMPT_XP);
+  });
+});
+
+describe("completeChallenge — streak reset", () => {
+  const OLD_ACTIVITY_DATE = "2025-01-01T00:00:00.000Z";
+  const OLD_STREAK_DATE = "2025-01-01";
+  const STALE_STREAK_DAYS = 5;
+  const CHALLENGE_DATE_AFTER_GAP = "2025-01-10T00:00:00.000Z";
+  const RESET_STREAK_DAYS = 1;
+
+  it("resets streakDays to 1 when gap is 2+ days", async () => {
+    const kv = createInMemoryKv();
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_STREAK"),
+      lastActivityAt: OLD_ACTIVITY_DATE,
+      streakLastDate: OLD_STREAK_DATE,
+      streakDays: STALE_STREAK_DAYS
+    });
+
+    const { progress } = await completeChallenge({
+      kv,
+      fingerprint: "FP_STREAK",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      nowIso: CHALLENGE_DATE_AFTER_GAP
+    });
+
+    expect(progress.streakDays).toBe(RESET_STREAK_DAYS);
+  });
+
+  it("awards daily return bonus when activity date has changed", async () => {
+    const DAILY_RETURN_BONUS_XP = 25;
+    const DEFAULT_ATTEMPT_XP = 20;
+    const kv = createInMemoryKv();
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_STREAK_BONUS"),
+      lastActivityAt: OLD_ACTIVITY_DATE,
+      streakLastDate: OLD_STREAK_DATE,
+      streakDays: STALE_STREAK_DAYS
+    });
+
+    const { xpAwarded } = await completeChallenge({
+      kv,
+      fingerprint: "FP_STREAK_BONUS",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      attemptNumber: 3,
+      nowIso: CHALLENGE_DATE_AFTER_GAP
+    });
+
+    expect(xpAwarded).toBeGreaterThanOrEqual(DEFAULT_ATTEMPT_XP + DAILY_RETURN_BONUS_XP);
+  });
+});
+
+describe("completeChallenge — graduate achievement", () => {
+  const ch5Only: readonly Chapter[] = [
+    {
+      id: "ch5",
+      title: "Chapter 5",
+      description: "",
+      lessons: [
+        {
+          id: "ch5-l1",
+          title: "L1",
+          description: "",
+          xpReward: 10,
+          challenges: [{ id: "ch5-l1-c1", setup: { type: "sign", plaintext: "sign" } }]
+        }
+      ]
+    }
+  ];
+
+  it("earns the graduate achievement when completing chapter ch5", async () => {
+    const kv = createInMemoryKv();
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_GRAD",
+      challengeId: "ch5-l1-c1",
+      lessonId: "ch5-l1",
+      chapterId: "ch5",
+      challengeType: "sign",
+      hintsUsed: 0,
+      attemptNumber: 1,
+      chapters: ch5Only,
+      nowIso: BASE_PARAMS.nowIso
+    });
+
+    expect(newAchievements).toContain("graduate");
+  });
+});
+
+describe("completeChallenge — persistence achievement", () => {
+  const PERSISTENCE_THRESHOLD_ATTEMPT = 5;
+
+  it("earns the persistence achievement when attemptNumber is 5 or more", async () => {
+    const kv = createInMemoryKv();
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_PERSIST",
+      challengeId: "ch1-l1-c1",
+      ...BASE_PARAMS,
+      attemptNumber: PERSISTENCE_THRESHOLD_ATTEMPT
+    });
+
+    expect(newAchievements).toContain("persistence");
+  });
+});
+
+describe("completeChallenge — all_chapters_complete achievement", () => {
+  const twoChapterMock: readonly Chapter[] = [
+    {
+      id: "ch1",
+      title: "C1",
+      description: "",
+      lessons: [
+        {
+          id: "ch1-l1",
+          title: "",
+          description: "",
+          xpReward: 10,
+          challenges: [{ id: "ch1-l1-c1", setup: { type: "explainer", content: "x" } }]
+        }
+      ]
+    },
+    {
+      id: "ch2",
+      title: "C2",
+      description: "",
+      lessons: [
+        {
+          id: "ch2-l1",
+          title: "",
+          description: "",
+          xpReward: 10,
+          challenges: [{ id: "ch2-l1-c1", setup: { type: "explainer", content: "x" } }]
+        }
+      ]
+    }
+  ];
+
+  it("earns all_chapters_complete when the last challenge of the last chapter is done", async () => {
+    const kv = createInMemoryKv();
+
+    await saveProgress(kv, {
+      ...createEmptyProgress("FP_ALL"),
+      completedChallenges: ["ch1-l1-c1"]
+    });
+
+    const { newAchievements } = await completeChallenge({
+      kv,
+      fingerprint: "FP_ALL",
+      challengeId: "ch2-l1-c1",
+      lessonId: "ch2-l1",
+      chapterId: "ch2",
+      challengeType: "explainer",
+      hintsUsed: 0,
+      attemptNumber: 1,
+      chapters: twoChapterMock,
+      nowIso: BASE_PARAMS.nowIso
+    });
+
+    expect(newAchievements).toContain("all_chapters_complete");
   });
 });

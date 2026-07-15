@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { SignJWT } from "jose";
 import {
   signJwt,
   verifyJwt,
@@ -60,6 +61,21 @@ describe("verifyJwt", () => {
 
   it("returns null for an expired token", async () => {
     const token = await signJwt({ sub: TEST_SUBJECT }, TEST_SECRET, EXPIRY_INSTANT);
+
+    const result = await verifyJwt(token, TEST_SECRET);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("verifyJwt — missing sub", () => {
+  it("returns null when the token payload contains no sub field", async () => {
+    const secretKey = new TextEncoder().encode(TEST_SECRET);
+    const token = await new SignJWT({ role: "admin" })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime(EXPIRY_ONE_HOUR)
+      .sign(secretKey);
 
     const result = await verifyJwt(token, TEST_SECRET);
 

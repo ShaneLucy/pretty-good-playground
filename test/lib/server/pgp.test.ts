@@ -94,3 +94,17 @@ describe("verifySignature", () => {
     expect(result.text).toBe(TEST_MESSAGE_TEXT);
   });
 });
+
+describe("verifySignature — no signatures", () => {
+  it("returns valid=false when the cleartext message has no embedded signatures", async () => {
+    const unsignedMessage = await createCleartextMessage({ text: TEST_MESSAGE_TEXT });
+    const armoredUnsigned = unsignedMessage.armor();
+
+    const result = await verifySignature({
+      armoredSignedMessage: armoredUnsigned,
+      publicKey: testPublicKey
+    });
+
+    expect(result.valid).toBe(false);
+  });
+});
